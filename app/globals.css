@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: var(--font-quicksand), sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-dm-serif), serif;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-4 md:px-8 lg:px-16 xl:px-24;
+  }
+  
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .btn-primary {
+    @apply bg-brand-red text-white px-6 py-3 rounded-full font-medium hover:bg-brand-red-dark transition-colors duration-300 shadow-lg hover:shadow-xl;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-brand-black text-brand-black px-6 py-3 rounded-full font-medium hover:bg-brand-black hover:text-white transition-colors duration-300;
+  }
+  
+  .btn-accent {
+    @apply bg-brand-black text-white px-6 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors duration-300;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-black to-brand-red bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+}
