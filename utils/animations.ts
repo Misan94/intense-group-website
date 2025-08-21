@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
 // Register ScrollTrigger plugin
 if (typeof window !== 'undefined') {

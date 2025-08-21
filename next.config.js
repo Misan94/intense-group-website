@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
-    domains: ['nitex.com'],
+    domains: ['intensegroup.com'],
     unoptimized: false,
   },
   // Enable static optimization for better SEO
@@ -13,7 +10,7 @@ const nextConfig = {
   compress: true,
   // Generate sitemap
   generateBuildId: async () => {
-    return 'nitex-recreation-build'
+    return 'intense-group-build'
   }
 }
 
