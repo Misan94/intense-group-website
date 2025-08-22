@@ -98,19 +98,19 @@ export default function HeroSection() {
           />
           
           {/* Subtle Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/10" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         </div>
       </div>
 
-      {/* Main Content - Right Aligned */}
-      <div className="relative z-10 w-full min-h-screen flex items-center justify-end">
+      {/* Main Content - Left Aligned */}
+      <div className="relative z-10 w-full min-h-screen flex items-center justify-start">
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 xl:px-24">
-          <div className="flex items-center justify-end min-h-screen">
+          <div className="flex items-center justify-start min-h-screen">
             
-            {/* Right-Aligned Typography */}
-            <div className="max-w-2xl text-right">
-              <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+            {/* Left-Aligned Typography */}
+            <div className="max-w-2xl text-left">
+              <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                 
                 {/* Main Headline */}
                 <h1 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white mb-6">
@@ -127,12 +127,12 @@ export default function HeroSection() {
                 
                 {/* Subtext */}
                 <div className={`transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                  <p className="text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-lg ml-auto mb-8">
+                  <p className="text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-lg mb-8">
                     Telling powerful stories that move brands from profit-only to purpose-driven growth across Africa and Europe.
                   </p>
                   
                   {/* Call to Action */}
-                  <div className="flex justify-end space-x-4">
+                  <div className="flex justify-start space-x-4">
                     <button className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-medium hover:bg-white/20 transition-all duration-300 border border-white/20">
                       Our Impact Story
                     </button>
