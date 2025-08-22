@@ -327,7 +327,7 @@ export default function WhatWeDoSection() {
                   {/* Left Side - Typography Area (60%) */}
                   <div className="lg:col-span-7">
                     <div ref={typographyRef} className="space-y-4">
-                      <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-white">
+                      <h2 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
                         {createAnimatedText(cards[currentCard].title)}
                       </h2>
                     </div>

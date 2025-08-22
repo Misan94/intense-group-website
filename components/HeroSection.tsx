@@ -37,7 +37,7 @@ export default function HeroSection() {
             {/* Subtext - Centered */}
             <div className={`transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <p className="text-gray-700 text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-8">
-                We unite strategy, performance, creative, data, and MarTech to move brands forward across Africa and Europe.
+                We unite strategy, performance, creative, data and MarTech to move brands forward across Africa and Europe.
               </p>
               
               {/* Call to Action - Centered */}
@@ -54,10 +54,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Subtle Decorative Elements */}
-      <div className="absolute top-1/4 left-10 w-1 h-1 bg-brand-red/30 rounded-full animate-pulse"></div>
-      <div className="absolute top-1/3 left-32 w-1.5 h-1.5 bg-brand-red/40 rounded-full animate-pulse delay-300"></div>
-      <div className="absolute bottom-1/3 right-20 w-2 h-2 bg-brand-red/20 rounded-full animate-pulse delay-700"></div>
+
       
       {/* Bottom Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
