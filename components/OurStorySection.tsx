@@ -27,7 +27,7 @@ export default function OurStorySection() {
     <section id="story" ref={sectionRef} className="py-24 bg-white relative overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: 'url(/our-story.webp)' }}
       ></div>
       <div className="section-padding relative z-10">
@@ -46,16 +46,16 @@ export default function OurStorySection() {
             {/* Left Side - Large Typography */}
             <div className="lg:col-span-7">
               <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black mb-4">
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
                   FROM VISION
                 </h2>
-                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black mb-4">
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
                   TO
                 </h2>
-                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black">
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white">
                   GLOBAL
                 </h2>
-                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black">
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white">
                   IMPACT
                 </h2>
               </div>
