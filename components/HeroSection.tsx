@@ -103,44 +103,51 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Main Content - Left Aligned */}
-      <div className="relative z-10 w-full min-h-screen flex items-center justify-start">
-        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 xl:px-24">
-          <div className="flex items-center justify-start min-h-screen">
-            
-            {/* Left-Aligned Typography */}
-            <div className="max-w-2xl text-left">
-              <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
-                
-                {/* Main Headline */}
-                <h1 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white mb-6">
-                  <span className={`block transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    GROWTH AS
-                  </span>
-                  <span className={`block transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    ENVIRONMENTAL
-                  </span>
-                  <span className={`block transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    RESPONSIBILITY
-                  </span>
-                </h1>
-                
-                {/* Subtext */}
-                <div className={`transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                  <p className="text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-lg mb-8">
-                    Telling powerful stories that move brands from profit-only to purpose-driven growth across Africa and Europe.
-                  </p>
+      {/* Main Content - Aligned with Our Story Section */}
+      <div className="relative z-10 w-full min-h-screen flex items-center">
+        <div className="section-padding w-full">
+          <div className="container-max">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-screen">
+              
+              {/* Left-Aligned Typography - Same positioning as Our Story */}
+              <div className="lg:col-span-7">
+                <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                   
-                  {/* Call to Action */}
-                  <div className="flex justify-start space-x-4">
-                    <button className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-medium hover:bg-white/20 transition-all duration-300 border border-white/20">
-                      Our Impact Story
-                    </button>
-                    <button className="bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-white/90 transition-all duration-300 shadow-lg">
-                      Start Your Journey
-                    </button>
+                  {/* Main Headline - Matching Our Story typography sizes */}
+                  <h1 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-6">
+                    <span className={`block transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                      GROWTH AS
+                    </span>
+                    <span className={`block transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                      ENVIRONMENTAL
+                    </span>
+                    <span className={`block transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                      RESPONSIBILITY
+                    </span>
+                  </h1>
+                  
+                  {/* Subtext */}
+                  <div className={`transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    <p className="text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-lg mb-8">
+                      Telling powerful stories that move brands from profit-only to purpose-driven growth across Africa and Europe.
+                    </p>
+                    
+                    {/* Call to Action */}
+                    <div className="flex justify-start space-x-4">
+                      <button className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-medium hover:bg-white/20 transition-all duration-300 border border-white/20">
+                        Our Impact Story
+                      </button>
+                      <button className="bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-white/90 transition-all duration-300 shadow-lg">
+                        Start Your Journey
+                      </button>
+                    </div>
                   </div>
                 </div>
+              </div>
+              
+              {/* Right Side - Empty space for balance */}
+              <div className="lg:col-span-5 hidden lg:block">
+                {/* This space intentionally left empty for visual balance */}
               </div>
             </div>
           </div>
