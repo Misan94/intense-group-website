@@ -17,10 +17,12 @@ export default function HeroSection() {
   // Text content for kinetic animation
   const headlineLines = [
     "A DECADE OF",
-    "DATA-DRIVEN GROWTH"
+    "DATA-DRIVEN"
   ]
 
-  const creativityLine = "DATA-DRIVEN CREATIVITY"
+  // Rotating words for glitch transition
+  const rotatingWords = ["GROWTH", "CREATIVITY", "STRATEGY"]
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
 
   // Character splitting function
   const splitTextIntoChars = (text: string, lineIndex: number) => {
@@ -146,26 +148,28 @@ export default function HeroSection() {
     
     setIsGlitching(true)
     
-    const growthLine = headlineRef.current.querySelector('[class*="line-1"]')
-    if (!growthLine) return
+    // Target the rotating word span specifically
+    const rotatingWordElement = headlineRef.current.querySelector('.rotating-word')
+    if (!rotatingWordElement) return
+
+    const currentWord = rotatingWords[currentWordIndex]
+    const nextWordIndex = (currentWordIndex + 1) % rotatingWords.length
+    const nextWord = rotatingWords[nextWordIndex]
 
     const glitchTimeline = gsap.timeline({
       onComplete: () => {
         setIsGlitching(false)
-        setShowCreativity(true)
+        setCurrentWordIndex(nextWordIndex)
+        // Start next transition after 3 seconds
         setTimeout(() => {
-          setShowCreativity(false)
-          // Loop back to growth after 3 seconds
-          setTimeout(() => {
-            startGlitchTransition()
-          }, 1000)
+          startGlitchTransition()
         }, 3000)
       }
     })
 
     // Phase 1: Digital Glitch Corruption (0-0.8s)
     glitchTimeline
-      .to(growthLine, {
+      .to(rotatingWordElement, {
         duration: 0.1,
         repeat: 8,
         yoyo: true,
@@ -176,7 +180,7 @@ export default function HeroSection() {
       })
 
     // Phase 2: Scan Lines Effect (0.8-1.2s)
-    .to(growthLine, {
+    .to(rotatingWordElement, {
       duration: 0.4,
       backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)",
       backgroundSize: "100% 4px",
@@ -185,15 +189,14 @@ export default function HeroSection() {
 
     // Phase 3: Binary Reveal (1.2-1.8s)
     .call(() => {
-      // Convert text to binary representation
-      const originalText = "GROWTH"
-      const binaryText = originalText.split('').map(char => 
+      // Convert current word to binary representation
+      const binaryText = currentWord.split('').map(char => 
         char.charCodeAt(0).toString(2).padStart(8, '0')
       ).join(' ')
       
-      if (growthLine) {
-        growthLine.textContent = binaryText
-        gsap.set(growthLine, {
+      if (rotatingWordElement) {
+        rotatingWordElement.textContent = binaryText
+        gsap.set(rotatingWordElement, {
           fontFamily: "monospace",
           fontSize: "0.6em",
           color: "#00ff00",
@@ -203,14 +206,14 @@ export default function HeroSection() {
     })
 
     // Phase 4: Pixel Shifting & Reconstruction (1.8-2.5s)
-    .to(growthLine, {
+    .to(rotatingWordElement, {
       duration: 0.3,
       scale: 0.8,
       opacity: 0.3,
       filter: "blur(2px)",
       ease: "power2.in"
     })
-    .to(growthLine, {
+    .to(rotatingWordElement, {
       duration: 0.4,
       scale: 1,
       opacity: 1,
@@ -218,11 +221,11 @@ export default function HeroSection() {
       ease: "elastic.out(1, 0.5)"
     })
 
-    // Phase 5: Final Reconstruction to CREATIVITY
+    // Phase 5: Final Reconstruction to next word
     .call(() => {
-      if (growthLine) {
-        growthLine.textContent = "CREATIVITY"
-        gsap.set(growthLine, {
+      if (rotatingWordElement) {
+        rotatingWordElement.textContent = nextWord
+        gsap.set(rotatingWordElement, {
           fontFamily: "var(--font-fraunces)",
           fontSize: "1em",
           color: "#000000",
@@ -233,7 +236,7 @@ export default function HeroSection() {
     })
     
     // Final RGB recombination effect
-    .from(growthLine, {
+    .from(rotatingWordElement, {
       duration: 0.5,
       textShadow: "3px 0 #ff0000, -3px 0 #00ffff",
       ease: "power2.out"
@@ -272,6 +275,19 @@ export default function HeroSection() {
                 {splitTextIntoWords(line, lineIndex)}
               </div>
             ))}
+            
+            {/* Rotating Word Line */}
+            <div 
+              className="block mb-2 last:mb-0 line-2"
+              style={{ 
+                perspective: '1000px',
+                transformStyle: 'preserve-3d' 
+              }}
+            >
+              <span className="rotating-word font-fraunces text-[2.7rem] md:text-[4.5rem] lg:text-[5.85rem] xl:text-[7.2rem] font-bold leading-none tracking-tight text-black">
+                {rotatingWords[currentWordIndex]}
+              </span>
+            </div>
           </h1>
           
           {/* Animated Subtext */}
