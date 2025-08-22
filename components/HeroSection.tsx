@@ -187,25 +187,7 @@ export default function HeroSection() {
       ease: "power2.inOut"
     })
 
-    // Phase 3: Binary Reveal (1.2-1.8s)
-    .call(() => {
-      // Convert current word to binary representation
-      const binaryText = currentWord.split('').map(char => 
-        char.charCodeAt(0).toString(2).padStart(8, '0')
-      ).join(' ')
-      
-      if (rotatingWordElement) {
-        rotatingWordElement.textContent = binaryText
-        gsap.set(rotatingWordElement, {
-          fontFamily: "monospace",
-          fontSize: "0.6em",
-          color: "#00ff00",
-          textShadow: "0 0 10px #00ff00"
-        })
-      }
-    })
-
-    // Phase 4: Pixel Shifting & Reconstruction (1.8-2.5s)
+    // Phase 3: Pixel Shifting & Reconstruction (1.2-1.9s)
     .to(rotatingWordElement, {
       duration: 0.3,
       scale: 0.8,
@@ -221,7 +203,7 @@ export default function HeroSection() {
       ease: "elastic.out(1, 0.5)"
     })
 
-    // Phase 5: Final Reconstruction to next word
+    // Phase 4: Final Reconstruction to next word
     .call(() => {
       if (rotatingWordElement) {
         rotatingWordElement.textContent = nextWord
@@ -230,7 +212,9 @@ export default function HeroSection() {
           fontSize: "1em",
           color: "#000000",
           textShadow: "none",
-          backgroundImage: "none"
+          backgroundImage: "none",
+          x: 0,
+          skewX: 0
         })
       }
     })
