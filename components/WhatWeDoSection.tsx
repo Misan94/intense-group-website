@@ -31,30 +31,35 @@ export default function WhatWeDoSection() {
     {
       id: 0,
       title: "GROWTH STRATEGY",
+      description: "We turn business goals into an execution roadmap, clear KPIs, roles, and an operating cadence that keeps every team in sync.",
       infoBox1: "STRATEGIC ALIGNMENT",
       infoBox2: "MEASURABLE TARGETS"
     },
     {
       id: 1,
       title: "CREATIVE EXCELLENCE",
+      description: "Insight-led ideas, crafted for each platform, that stop the scroll and start conversations, built to drive brand and demand.",
       infoBox1: "ATTENTION-EARNING CREATIVE",
       infoBox2: "ENGAGEMENT DRIVEN"
     },
     {
       id: 2,
       title: "PERFORMANCE MEDIA",
+      description: "Full-funnel plans with constant testing and smart reallocation, so every pound works harder and results improve quarter after quarter.",
       infoBox1: "COMPOUND ROI GROWTH",
       infoBox2: "DATA-DRIVEN OPTIMIZATION"
     },
     {
       id: 3,
       title: "DATA SCIENCE",
+      description: "We connect your data, surface leading indicators, and use AI to guide faster, smarter moves with measurement you can trust.",
       infoBox1: "INTELLIGENT DECISIONS",
       infoBox2: "ADVANCED ANALYTICS"
     },
     {
       id: 4,
       title: "CUSTOM AI SOLUTIONS",
+      description: "We design and build useful AI apps, assistants and automations rooted in real workflows and measured by outcomes.",
       infoBox1: "BESPOKE AI APPLICATIONS",
       infoBox2: "SEAMLESS INTEGRATION"
     }
@@ -158,6 +163,12 @@ export default function WhatWeDoSection() {
       stagger: 0.02,
       ease: 'power2.in'
     }, 0)
+    .to('.service-description', {
+      x: -50,
+      opacity: 0,
+      duration: 0.4,
+      ease: 'power2.in'
+    }, 0.1)
     .to(imageRef.current, {
       scale: 0.9,
       opacity: 0,
@@ -175,6 +186,7 @@ export default function WhatWeDoSection() {
 
     // Enter phase (0.5 - 1.0)
     .set('.animated-word', { x: 100 }, 0.5)
+    .set('.service-description', { x: 50 }, 0.5)
     .set(imageRef.current, { scale: 1.1, rotation: 2 }, 0.5)
     .set('.info-box', { y: 30 }, 0.5)
     
@@ -185,6 +197,12 @@ export default function WhatWeDoSection() {
       stagger: 0.02,
       ease: 'power2.out'
     }, 0.5)
+    .to('.service-description', {
+      x: 0,
+      opacity: 1,
+      duration: 0.4,
+      ease: 'power2.out'
+    }, 0.6)
     .to(imageRef.current, {
       scale: 1,
       opacity: 1,
@@ -282,6 +300,7 @@ export default function WhatWeDoSection() {
 
     // Initialize first card state
     gsap.set('.animated-word', { opacity: 1, x: 0 })
+    gsap.set('.service-description', { opacity: 1, x: 0 })
     gsap.set(imageRef.current, { opacity: 1, scale: 1, rotation: 0 })
     gsap.set('.info-box', { opacity: 1, y: 0 })
 
@@ -326,10 +345,13 @@ export default function WhatWeDoSection() {
                   
                   {/* Left Side - Typography Area (60%) */}
                   <div className="lg:col-span-7">
-                    <div ref={typographyRef} className="space-y-4">
+                    <div ref={typographyRef} className="space-y-6">
                       <h2 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
                         {createAnimatedText(cards[currentCard].title)}
                       </h2>
+                      <p className="service-description text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-2xl">
+                        {cards[currentCard].description}
+                      </p>
                     </div>
                   </div>
 
