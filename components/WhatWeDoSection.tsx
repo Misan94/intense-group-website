@@ -176,19 +176,34 @@ export default function WhatWeDoSection() {
       duration: 0.5,
       ease: 'power2.in'
     }, 0)
-    .to('.info-box', {
-      y: 50,
+    .to('.bullet-item', {
+      y: 30,
       opacity: 0,
-      duration: 0.5,
-      stagger: 0.05,
+      duration: 0.4,
+      stagger: 0.1,
       ease: 'power2.in'
     }, 0)
+    .to('.bullet-char', {
+      y: -10,
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.02,
+      ease: 'power2.in'
+    }, 0)
+    .to('.connecting-line', {
+      scaleY: 0,
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.in'
+    }, 0.1)
 
     // Enter phase (0.5 - 1.0)
     .set('.animated-word', { x: 100 }, 0.5)
     .set('.service-description', { x: 50 }, 0.5)
     .set(imageRef.current, { scale: 1.1, rotation: 2 }, 0.5)
-    .set('.info-box', { y: 30 }, 0.5)
+    .set('.bullet-item', { y: 20 }, 0.5)
+    .set('.bullet-char', { y: 10, opacity: 0 }, 0.5)
+    .set('.connecting-line', { scaleY: 0 }, 0.5)
     
     .to('.animated-word', {
       x: 0,
@@ -210,13 +225,26 @@ export default function WhatWeDoSection() {
       duration: 0.5,
       ease: 'power2.out'
     }, 0.5)
-    .to('.info-box', {
+    .to('.bullet-item', {
       y: 0,
       opacity: 1,
       duration: 0.5,
-      stagger: 0.05,
+      stagger: 0.15,
       ease: 'power2.out'
-    }, 0.5)
+    }, 0.7)
+    .to('.bullet-char', {
+      y: 0,
+      opacity: 1,
+      duration: 0.4,
+      stagger: 0.03,
+      ease: 'power2.out'
+    }, 0.8)
+    .to('.connecting-line', {
+      scaleY: 1,
+      opacity: 1,
+      duration: 0.4,
+      ease: 'power2.out'
+    }, 0.85)
 
     return tl
   }
@@ -302,7 +330,9 @@ export default function WhatWeDoSection() {
     gsap.set('.animated-word', { opacity: 1, x: 0 })
     gsap.set('.service-description', { opacity: 1, x: 0 })
     gsap.set(imageRef.current, { opacity: 1, scale: 1, rotation: 0 })
-    gsap.set('.info-box', { opacity: 1, y: 0 })
+    gsap.set('.bullet-item', { opacity: 1, y: 0 })
+    gsap.set('.bullet-char', { opacity: 1, y: 0 })
+    gsap.set('.connecting-line', { opacity: 1, scaleY: 1 })
 
     return () => {
       scrollTrigger.kill()
@@ -381,23 +411,105 @@ export default function WhatWeDoSection() {
                   </div>
                 </div>
 
-                {/* Info Boxes */}
+                {/* Sophisticated Bullet List */}
                 <div ref={infoBoxesRef} className="mt-12 lg:mt-16">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-                    <div className="info-box bg-brand-red p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-white rounded-full"></div>
-                        <span className="font-bold text-white text-lg tracking-wide">
-                          {cards[currentCard].infoBox1}
-                        </span>
+                  <div className="max-w-3xl">
+                    <div className="space-y-6">
+                      {/* Bullet Item 1 */}
+                      <div className="bullet-item flex items-start space-x-4 group" style={{ willChange: 'transform' }}>
+                        {/* Custom Checkmark Bullet */}
+                        <div className="bullet-point flex-shrink-0 mt-1">
+                          <div className="relative w-6 h-6">
+                            {/* Checkmark background circle */}
+                            <div className="absolute inset-0 bg-brand-red rounded-full opacity-90 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand-red/30"></div>
+                            {/* Checkmark icon */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <svg 
+                                className="w-3.5 h-3.5 text-white transition-all duration-300 group-hover:scale-110" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                              >
+                                <path 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round" 
+                                  strokeWidth={3} 
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </div>
+                            {/* Subtle glow effect */}
+                            <div className="absolute inset-0 bg-brand-red rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Bullet Text */}
+                        <div className="bullet-text flex-1">
+                          <span className="text-white/90 text-lg font-medium leading-relaxed tracking-wide transition-all duration-300 group-hover:text-white">
+                            {cards[currentCard].infoBox1.split('').map((char, index) => (
+                              <span 
+                                key={index}
+                                className={`bullet-char inline-block transition-all duration-100 ${char === ' ' ? 'w-2' : ''}`}
+                                style={{ 
+                                  animationDelay: `${index * 50}ms`,
+                                  willChange: 'transform, opacity'
+                                }}
+                              >
+                                {char === ' ' ? '\u00A0' : char}
+                              </span>
+                            ))}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="info-box bg-brand-red p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-white rounded-full"></div>
-                        <span className="font-bold text-white text-lg tracking-wide">
-                          {cards[currentCard].infoBox2}
-                        </span>
+
+                      {/* Connecting Line */}
+                      <div className="connecting-line ml-3 w-px h-4 bg-gradient-to-b from-brand-red/60 to-brand-red/20"></div>
+
+                      {/* Bullet Item 2 */}
+                      <div className="bullet-item flex items-start space-x-4 group" style={{ willChange: 'transform' }}>
+                        {/* Custom Checkmark Bullet */}
+                        <div className="bullet-point flex-shrink-0 mt-1">
+                          <div className="relative w-6 h-6">
+                            {/* Checkmark background circle */}
+                            <div className="absolute inset-0 bg-brand-red rounded-full opacity-90 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand-red/30"></div>
+                            {/* Checkmark icon */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <svg 
+                                className="w-3.5 h-3.5 text-white transition-all duration-300 group-hover:scale-110" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                              >
+                                <path 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round" 
+                                  strokeWidth={3} 
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </div>
+                            {/* Subtle glow effect */}
+                            <div className="absolute inset-0 bg-brand-red rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Bullet Text */}
+                        <div className="bullet-text flex-1">
+                          <span className="text-white/90 text-lg font-medium leading-relaxed tracking-wide transition-all duration-300 group-hover:text-white">
+                            {cards[currentCard].infoBox2.split('').map((char, index) => (
+                              <span 
+                                key={index}
+                                className={`bullet-char inline-block transition-all duration-100 ${char === ' ' ? 'w-2' : ''}`}
+                                style={{ 
+                                  animationDelay: `${index * 50}ms`,
+                                  willChange: 'transform, opacity'
+                                }}
+                              >
+                                {char === ' ' ? '\u00A0' : char}
+                              </span>
+                            ))}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
