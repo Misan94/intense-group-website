@@ -24,7 +24,7 @@ export default function WhatWeDoSection() {
   const infoBoxesRef = useRef<HTMLDivElement>(null)
   const transitionTimelineRef = useRef<gsap.core.Timeline | null>(null)
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null)
-  const progressBarRef = useRef<HTMLDivElement>(null)
+
 
   // Card data for all 5 services
   const cards = [
@@ -234,10 +234,7 @@ export default function WhatWeDoSection() {
       }
     }
     
-    // Update progress bar
-    if (progressBarRef.current) {
-      gsap.set(progressBarRef.current, { scaleY: progress })
-    }
+
   }
 
   // Initialize ScrollTrigger and transition timeline
@@ -294,30 +291,7 @@ export default function WhatWeDoSection() {
     }
   }, [isVisible])
 
-  // Handle dot navigation with smooth scrolling
-  const goToCard = (targetIndex: number) => {
-    if (!sectionRef.current) return
-    
-    // Calculate scroll position for the target card
-    const sectionTop = sectionRef.current.offsetTop
-    const targetProgress = (targetIndex / 5) + (0.1 / 5) // Center of target zone
-    const sectionHeight = sectionRef.current.offsetHeight
-    const targetScroll = sectionTop + (targetProgress * sectionHeight * 0.8) // 80% to center the card
-    
-    // Smooth scroll to target
-    window.scrollTo({
-      top: targetScroll,
-      behavior: 'smooth'
-    })
-  }
 
-  // Get active dot based on current card and transition progress
-  const getActiveDot = () => {
-    if (isInTransition && transitionProgress > 0.5) {
-      return Math.min(currentCard + 1, cards.length - 1)
-    }
-    return currentCard
-  }
 
   return (
     <section 
@@ -411,64 +385,7 @@ export default function WhatWeDoSection() {
           </div>
         </div>
 
-        {/* Vertical Navigation & Progress - Right side */}
-        <div className={`fixed right-8 top-1/2 transform -translate-y-1/2 z-20 transition-all duration-500 ${
-          isScrollTriggerActive ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8 pointer-events-none'
-        }`}>
-          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-            
-            {/* Vertical Progress Bar */}
-            <div className="relative mb-6">
-              <div className="w-1 h-32 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  ref={progressBarRef}
-                  className="w-full bg-brand-red origin-top scale-y-0"
-                  style={{ willChange: 'transform', transformOrigin: 'top' }}
-                ></div>
-              </div>
-            </div>
-            
-            {/* Vertical Dot Navigation */}
-            <div className="flex flex-col items-center space-y-4 mb-6">
-              {cards.map((_, index) => {
-                const activeDot = getActiveDot()
-                return (
-                  <button
-                    key={index}
-                    onClick={() => goToCard(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 relative group ${
-                      activeDot === index 
-                        ? 'bg-brand-red scale-125' 
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    aria-label={`Go to card ${index + 1}`}
-                  >
-                    {/* Card number tooltip */}
-                    <span className={`absolute right-6 top-1/2 transform -translate-y-1/2 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
-                      activeDot === index 
-                        ? 'text-brand-red opacity-100' 
-                        : 'text-white/50 opacity-0 group-hover:opacity-100'
-                    }`}>
-                      {index + 1}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
 
-            {/* Scroll Progress Indicator */}
-            <div className="text-right">
-              <div className="bg-brand-black/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm border border-white/20">
-                <div className="text-xs text-white/50 font-medium">
-                  {Math.round(scrollProgress * 100)}%
-                </div>
-                <div className="text-xs text-white font-semibold">
-                  Card {currentCard + 1} of {cards.length}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* CTA Section - At the very end */}
         <div className="absolute bottom-0 left-0 right-0 py-16 bg-brand-black">
