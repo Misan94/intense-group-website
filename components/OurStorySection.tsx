@@ -253,16 +253,16 @@ export default function OurStorySection() {
                  ref={typographyContainerRef}
                  className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                >
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
+                 <h2 className="font-fraunces text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
                    {createCharacterSpans('VISION.', 0)}
                  </h2>
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
+                 <h2 className="font-fraunces text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
                    {createCharacterSpans('ACTION.', 1)}
                  </h2>
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
+                 <h2 className="font-fraunces text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
                    {createCharacterSpans('GLOBAL', 2)}
                  </h2>
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white">
+                 <h2 className="font-fraunces text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white">
                    {createCharacterSpans('IMPACT.', 3)}
                  </h2>
                </div>
@@ -278,10 +278,10 @@ export default function OurStorySection() {
                 <div className="bg-brand-red p-8 lg:p-10 rounded-2xl relative" style={{ willChange: 'transform' }}>
                   <div className="space-y-6">
                     <p className="text-lg md:text-xl text-white leading-relaxed font-medium">
-                      Founded in London with a bold mission to reinvent the marketing landscape, Intense Group has rapidly transformed into a multi-continent powerhouse.
+                    Intense Group exists to rethink how modern marketing drives growth. Today we operate as a multi-market, cross-functional team—strategists, creatives, and performance specialists working in lockstep.
                     </p>
                     <p className="text-lg md:text-xl text-white leading-relaxed font-medium">
-                      Today, our cross-functional teams work seamlessly from London to Barcelona, backed by a network of specialist agencies and partners. Through proprietary tech, we deliver creative excellence, speed and transparency—redefining how brands design, sample and ship seasonal collections.
+                    By blending data, creativity, and AI, we plan, launch, and scale campaigns with speed and clarity, turning marketing spend into measurable revenue.
                     </p>
                   </div>
 

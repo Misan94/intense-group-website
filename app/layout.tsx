@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import { DM_Serif_Display, Quicksand } from 'next/font/google'
+import { Fraunces, Inter } from 'next/font/google'
 import StructuredData from '@/components/StructuredData'
 import AppWrapper from '@/components/AppWrapper'
 import './globals.css'
 
-const dmSerif = DM_Serif_Display({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-dm-serif',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-fraunces',
   display: 'swap',
 })
 
-const quicksand = Quicksand({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-quicksand',
+  variable: '--font-inter',
   display: 'swap',
 })
 
@@ -93,7 +93,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${dmSerif.variable} ${quicksand.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -101,7 +101,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className="font-quicksand antialiased">
+      <body className="font-inter antialiased">
         <StructuredData />
         <AppWrapper>
           <div className="min-h-screen bg-white">

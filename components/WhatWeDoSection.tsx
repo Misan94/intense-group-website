@@ -376,10 +376,10 @@ export default function WhatWeDoSection() {
                   {/* Left Side - Typography Area (60%) */}
                   <div className="lg:col-span-7">
                     <div ref={typographyRef} className="space-y-4">
-                      <h2 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
+                      <h2 className="font-fraunces text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
                         {createAnimatedText(cards[currentCard].title)}
                       </h2>
-                      <p className="service-description text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-2xl">
+                      <p className="service-description font-inter text-white/90 text-lg md:text-xl font-light leading-relaxed max-w-2xl">
                         {cards[currentCard].description}
                       </p>
                     </div>
@@ -445,7 +445,7 @@ export default function WhatWeDoSection() {
                         
                         {/* Bullet Text */}
                         <div className="bullet-text flex-1">
-                          <span className="text-white/90 text-lg font-medium leading-relaxed tracking-wide transition-all duration-300 group-hover:text-white">
+                          <span className="font-inter text-white/90 text-lg font-medium leading-relaxed tracking-wide transition-all duration-300 group-hover:text-white">
                             {cards[currentCard].infoBox1.split('').map((char, index) => (
                               <span 
                                 key={index}
@@ -495,7 +495,7 @@ export default function WhatWeDoSection() {
                         
                         {/* Bullet Text */}
                         <div className="bullet-text flex-1">
-                          <span className="text-white/90 text-lg font-medium leading-relaxed tracking-wide transition-all duration-300 group-hover:text-white">
+                          <span className="font-inter text-white/90 text-lg font-medium leading-relaxed tracking-wide transition-all duration-300 group-hover:text-white">
                             {cards[currentCard].infoBox2.split('').map((char, index) => (
                               <span 
                                 key={index}

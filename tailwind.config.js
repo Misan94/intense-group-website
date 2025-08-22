@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'dm-serif': ['DM Serif Display', 'serif'],
-        'quicksand': ['Quicksand', 'sans-serif'],
+        'fraunces': ['var(--font-fraunces)', 'serif'],
+        'inter': ['var(--font-inter)', 'sans-serif'],
       },
       colors: {
         'brand-black': '#161519',
