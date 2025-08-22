@@ -323,7 +323,7 @@ export default function WhatWeDoSection() {
     <section 
       id="what-we-do" 
       ref={sectionRef} 
-      className="relative bg-white"
+      className="relative bg-brand-black"
       style={{ height: '500vh' }} // 5x viewport height for scroll zones
     >
       {/* Scroll Container */}
@@ -340,7 +340,7 @@ export default function WhatWeDoSection() {
               {/* Section Header */}
               <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="text-center mb-16">
-                  <span className="text-sm font-semibold text-gray-500 tracking-wider uppercase mb-4 block">
+                  <span className="text-sm font-semibold text-white/70 tracking-wider uppercase mb-4 block">
                     [02] WHAT WE DO
                   </span>
                 </div>
@@ -353,7 +353,7 @@ export default function WhatWeDoSection() {
                   {/* Left Side - Typography Area (60%) */}
                   <div className="lg:col-span-7">
                     <div ref={typographyRef} className="space-y-4">
-                      <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
+                      <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-white">
                         {createAnimatedText(cards[currentCard].title)}
                       </h2>
                     </div>
@@ -390,16 +390,16 @@ export default function WhatWeDoSection() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
                     <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
                       <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-brand-black rounded-full"></div>
-                        <span className="font-bold text-brand-black text-lg tracking-wide">
+                        <div className="w-3 h-3 bg-white rounded-full"></div>
+                        <span className="font-bold text-white text-lg tracking-wide">
                           {cards[currentCard].infoBox1}
                         </span>
                       </div>
                     </div>
                     <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
                       <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-brand-black rounded-full"></div>
-                        <span className="font-bold text-brand-black text-lg tracking-wide">
+                        <div className="w-3 h-3 bg-white rounded-full"></div>
+                        <span className="font-bold text-white text-lg tracking-wide">
                           {cards[currentCard].infoBox2}
                         </span>
                       </div>
@@ -447,7 +447,7 @@ export default function WhatWeDoSection() {
                     <span className={`absolute right-6 top-1/2 transform -translate-y-1/2 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
                       activeDot === index 
                         ? 'text-brand-red opacity-100' 
-                        : 'text-gray-500 opacity-0 group-hover:opacity-100'
+                        : 'text-white/50 opacity-0 group-hover:opacity-100'
                     }`}>
                       {index + 1}
                     </span>
@@ -458,11 +458,11 @@ export default function WhatWeDoSection() {
 
             {/* Scroll Progress Indicator */}
             <div className="text-right">
-              <div className="bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
-                <div className="text-xs text-gray-500 font-medium">
+              <div className="bg-brand-black/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm border border-white/20">
+                <div className="text-xs text-white/50 font-medium">
                   {Math.round(scrollProgress * 100)}%
                 </div>
-                <div className="text-xs text-brand-black font-semibold">
+                <div className="text-xs text-white font-semibold">
                   Card {currentCard + 1} of {cards.length}
                 </div>
               </div>
@@ -471,7 +471,7 @@ export default function WhatWeDoSection() {
         </div>
 
         {/* CTA Section - At the very end */}
-        <div className="absolute bottom-0 left-0 right-0 py-16 bg-white">
+        <div className="absolute bottom-0 left-0 right-0 py-16 bg-brand-black">
           <div className="section-padding">
             <div className="container-max">
               <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
