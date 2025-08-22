@@ -113,8 +113,8 @@ export default function HeroSection() {
               <div className="lg:col-span-7">
                 <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                   
-                  {/* Main Headline - Matching Our Story typography sizes */}
-                  <h1 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-6">
+                  {/* Main Headline - Moderate professional sizing */}
+                  <h1 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white mb-6">
                     <span className={`block transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                       GROWTH AS
                     </span>
@@ -160,7 +160,7 @@ export default function HeroSection() {
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
             
             {/* Mobile Headline */}
-            <h1 className="font-dm-serif text-3xl md:text-4xl font-bold leading-tight text-white mb-6">
+            <h1 className="font-dm-serif text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white mb-6">
               <span className={`block transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 GROWTH AS
               </span>
