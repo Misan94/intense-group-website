@@ -71,20 +71,20 @@ export default function OurStorySection() {
     }
   }
 
-  // Video zoom calculation
+  // Video zoom calculation - Reduced scaling for better quality
   const calculateVideoZoom = (progress: number) => {
     if (progress <= 0.25) {
-      // Entry phase: 1.0 → 1.1
-      return 1.0 + (0.1 * (progress / 0.25))
+      // Entry phase: 1.0 → 1.025
+      return 1.0 + (0.025 * (progress / 0.25))
     } else if (progress <= 0.75) {
-      // Active phase: 1.1 → 1.2 → 1.1
+      // Active phase: 1.025 → 1.05 → 1.025
       const activeProgress = (progress - 0.25) / 0.5
       const sineWave = Math.sin(activeProgress * Math.PI * 2)
-      return 1.1 + (0.1 * sineWave * 0.5)
+      return 1.025 + (0.025 * sineWave * 0.5)
     } else {
-      // Exit phase: 1.1 → 1.0
+      // Exit phase: 1.025 → 1.0
       const exitProgress = (progress - 0.75) / 0.25
-      return 1.1 - (0.1 * exitProgress)
+      return 1.025 - (0.025 * exitProgress)
     }
   }
 
@@ -220,7 +220,7 @@ export default function OurStorySection() {
 
   return (
     <section id="story" ref={sectionRef} className="py-24 bg-white relative overflow-hidden">
-             {/* Background Video */}
+             {/* Background Video with Quality Enhancements */}
        <video 
          ref={videoRef}
          className="absolute inset-0 w-full h-full object-cover"
@@ -228,7 +228,14 @@ export default function OurStorySection() {
          muted
          loop
          playsInline
-         style={{ willChange: 'transform' }}
+         preload="metadata"
+         style={{ 
+           willChange: 'transform',
+           transform: 'translateZ(0)', // Force GPU acceleration
+           backfaceVisibility: 'hidden', // Improve rendering performance
+           WebkitFontSmoothing: 'antialiased', // Smooth rendering
+           MozOsxFontSmoothing: 'grayscale' // Smooth rendering for Firefox
+         } as React.CSSProperties}
        >
          <source src="/our-story.mp4" type="video/mp4" />
          {/* Fallback for browsers that don't support video */}

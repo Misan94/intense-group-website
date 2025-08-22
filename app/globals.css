@@ -145,6 +145,45 @@
       -webkit-backdrop-filter: var(--backdrop-filter, blur(20px) saturate(160%));
     }
   }
+
+  /* Video Quality Enhancements */
+  video {
+    /* High-quality rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    
+    /* GPU acceleration for smooth playback */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    
+    /* Smooth font rendering for video overlays */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* Optimize for quality over speed */
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+  }
+
+  /* Video container optimizations */
+  video[autoplay] {
+    /* Ensure smooth autoplay */
+    will-change: transform, opacity;
+    contain: layout style paint;
+  }
+
+  /* High DPI display optimizations */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    video {
+      /* Enhanced quality for retina displays */
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: optimize-contrast;
+    }
+  }
   
   .animation-delay-600 {
     animation-delay: 600ms;
