@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DM_Serif_Display, Quicksand } from 'next/font/google'
 import StructuredData from '@/components/StructuredData'
+import AppWrapper from '@/components/AppWrapper'
 import './globals.css'
 
 const dmSerif = DM_Serif_Display({
@@ -102,9 +103,11 @@ export default function RootLayout({
       </head>
       <body className="font-quicksand antialiased">
         <StructuredData />
-        <div className="min-h-screen bg-white">
-          {children}
-        </div>
+        <AppWrapper>
+          <div className="min-h-screen bg-white">
+            {children}
+          </div>
+        </AppWrapper>
       </body>
     </html>
   )

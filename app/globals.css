@@ -40,6 +40,21 @@
   .gradient-text {
     @apply bg-gradient-to-r from-brand-black to-brand-red bg-clip-text text-transparent;
   }
+  
+  /* Preload Animation Styles */
+  .char {
+    display: inline-block;
+    will-change: transform, opacity;
+    transform-origin: center bottom;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .preload-typography {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
 }
 
 @layer utilities {
