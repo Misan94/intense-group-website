@@ -46,16 +46,16 @@ export default function HeroSection() {
             <div className="w-full">
               <div className={`transition-all duration-1500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                 {/* Brand Name - Large Golden Typography */}
-                <div className="mb-8">
+                <div className="mb-8 text-left">
+                  <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400 mb-4">
+                    The
+                  </h1>
                   <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400 mb-4">
                     Intense
                   </h1>
-                  <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400 mb-2">
+                  <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400">
                     Group
                   </h1>
-                  <div className="text-yellow-400 text-xl md:text-2xl font-light tracking-wider">
-                    ™
-                  </div>
                 </div>
               </div>
             </div>
