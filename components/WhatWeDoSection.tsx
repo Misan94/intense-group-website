@@ -412,7 +412,7 @@ export default function WhatWeDoSection() {
                 </div>
 
                 {/* Sophisticated Bullet List */}
-                <div ref={infoBoxesRef} className="mt-6 lg:mt-8">
+                <div ref={infoBoxesRef} className="mt-3 lg:mt-4">
                   <div className="max-w-3xl">
                     <div className="space-y-4">
                       {/* Bullet Item 1 */}
