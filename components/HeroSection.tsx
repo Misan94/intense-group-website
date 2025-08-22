@@ -24,10 +24,6 @@ export default function HeroSection() {
       <span
         key={`${lineIndex}-${charIndex}`}
         className={`kinetic-char inline-block will-change-transform char-${lineIndex}-${charIndex}`}
-        style={{
-          opacity: 0,
-          transform: 'translateY(100px) rotateZ(5deg)',
-        }}
       >
         {char === ' ' ? '\u00A0' : char}
       </span>
@@ -40,10 +36,6 @@ export default function HeroSection() {
       <span
         key={`${lineIndex}-${wordIndex}`}
         className={`kinetic-word inline-block will-change-transform word-${lineIndex}-${wordIndex}`}
-        style={{
-          opacity: 0,
-          transform: `translateX(${wordIndex % 2 === 0 ? '-100px' : '100px'}) translateY(50px)`,
-        }}
       >
         {splitTextIntoChars(word, lineIndex)}
         {wordIndex < text.split(' ').length - 1 && <span className="inline-block w-4"></span>}
@@ -69,14 +61,19 @@ export default function HeroSection() {
       onComplete: () => setAnimationComplete(true)
     })
 
+    // Set initial states and animate
+    gsap.set(".kinetic-word", { opacity: 0, x: -100, y: 50 })
+    gsap.set(".kinetic-char", { opacity: 0, y: 100, rotation: 5 })
+
     // Animate each line with staggered reveals
     headlineLines.forEach((line, lineIndex) => {
-      const words = headlineRef.current?.querySelectorAll(`.word-${lineIndex}-*`)
-      const chars = headlineRef.current?.querySelectorAll(`.char-${lineIndex}-*`)
+      // Get all words and chars for this line
+      const lineWords = Array.from(headlineRef.current?.querySelectorAll(`[class*="word-${lineIndex}-"]`) || [])
+      const lineChars = Array.from(headlineRef.current?.querySelectorAll(`[class*="char-${lineIndex}-"]`) || [])
 
-      if (words && chars) {
+      if (lineWords.length > 0 && lineChars.length > 0) {
         // First: Word-level directional reveals
-        tl.to(words, {
+        tl.to(lineWords, {
           opacity: 1,
           x: 0,
           y: 0,
@@ -89,7 +86,7 @@ export default function HeroSection() {
         }, lineIndex * 0.2)
 
         // Then: Character-level typewriter with bounce
-        .to(chars, {
+        .to(lineChars, {
           opacity: 1,
           y: 0,
           rotation: 0,
@@ -99,7 +96,7 @@ export default function HeroSection() {
         }, lineIndex * 0.2 + 0.2)
 
         // Color shift effect for each character
-        .to(chars, {
+        .to(lineChars, {
           color: '#fe3102', // Brand red
           duration: 0.3,
           stagger: 0.02,
@@ -109,12 +106,12 @@ export default function HeroSection() {
         }, lineIndex * 0.2 + 0.8)
 
         // Micro-rotations for organic feel
-        .to(chars, {
+        .to(lineChars, {
           rotation: () => gsap.utils.random(-2, 2),
           duration: 0.4,
           ease: "sine.inOut",
           stagger: 0.02
-        }, lineIndex * 0.2 + 0.8)
+        }, lineIndex * 0.2 + 1.0)
       }
     })
 
