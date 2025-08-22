@@ -185,15 +185,7 @@ export default function HeroSection() {
         skewX: () => gsap.utils.random(-10, 10),
       })
 
-    // Phase 2: Scan Lines Effect (0.8-1.2s)
-    .to(rotatingWordElement, {
-      duration: 0.4,
-      backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)",
-      backgroundSize: "100% 4px",
-      ease: "power2.inOut"
-    })
-
-    // Phase 3: Pixel Shifting & Reconstruction (1.2-1.9s)
+    // Phase 2: Pixel Shifting & Reconstruction (0.8-1.5s)
     .to(rotatingWordElement, {
       duration: 0.3,
       scale: 0.8,
@@ -209,7 +201,7 @@ export default function HeroSection() {
       ease: "elastic.out(1, 0.5)"
     })
 
-    // Phase 4: Final Reconstruction to next word
+    // Phase 3: Final Reconstruction to next word
     .call(() => {
       if (rotatingWordElement) {
         rotatingWordElement.textContent = nextWord
@@ -218,7 +210,6 @@ export default function HeroSection() {
           fontSize: "1em",
           color: "#000000",
           textShadow: "none",
-          backgroundImage: "none",
           x: 0,
           skewX: 0
         })
