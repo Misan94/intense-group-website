@@ -25,7 +25,12 @@ export default function OurStorySection() {
 
   return (
     <section id="story" ref={sectionRef} className="py-24 bg-white relative overflow-hidden">
-      <div className="section-padding">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+        style={{ backgroundImage: 'url(/our-story.webp)' }}
+      ></div>
+      <div className="section-padding relative z-10">
         <div className="container-max">
           {/* Section Header */}
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -83,27 +88,7 @@ export default function OurStorySection() {
             </div>
           </div>
 
-          {/* Global Offices */}
-          <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="mt-20 text-center">
-              <h3 className="font-dm-serif text-2xl md:text-3xl font-bold mb-8">Our Global Presence</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                {[
-                  { city: 'London', country: 'United Kingdom', role: 'European Hub' },
-                  { city: 'Barcelona', country: 'Spain', role: 'Creative Center' },
-                ].map((office, index) => (
-                  <div key={office.city} className={`text-center animate-fade-in animation-delay-${index * 200}`}>
-                    <div className="w-16 h-16 bg-brand-gray rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <div className="w-3 h-3 bg-brand-red rounded-full"></div>
-                    </div>
-                    <h4 className="font-semibold text-brand-black">{office.city}</h4>
-                    <p className="text-sm text-gray-600">{office.country}</p>
-                    <p className="text-xs text-gray-500 mt-1">{office.role}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </section>
