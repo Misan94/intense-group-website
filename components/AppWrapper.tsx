@@ -9,15 +9,10 @@ interface AppWrapperProps {
 
 export default function AppWrapper({ children }: AppWrapperProps) {
   const [isPreloadComplete, setIsPreloadComplete] = useState(false)
-  const [showContent, setShowContent] = useState(false)
 
-  // Handle preload completion
+  // Handle preload completion - instant show
   const handlePreloadComplete = () => {
     setIsPreloadComplete(true)
-    // Small delay to ensure smooth transition
-    setTimeout(() => {
-      setShowContent(true)
-    }, 100)
   }
 
   // Check if this is the first visit or if we should show preload
@@ -28,7 +23,6 @@ export default function AppWrapper({ children }: AppWrapperProps) {
     
     if (shouldSkipPreload) {
       setIsPreloadComplete(true)
-      setShowContent(true)
     }
   }, [])
 
@@ -39,14 +33,10 @@ export default function AppWrapper({ children }: AppWrapperProps) {
         <PreloadTransition onComplete={handlePreloadComplete} />
       )}
 
-      {/* Main Content */}
+      {/* Main Content - Show instantly when preload completes */}
       <div 
-        className={`transition-opacity duration-500 ${
-          showContent ? 'opacity-100' : 'opacity-0'
-        }`}
         style={{ 
-          visibility: showContent ? 'visible' : 'hidden',
-          willChange: 'opacity'
+          display: isPreloadComplete ? 'block' : 'none'
         }}
       >
         {children}

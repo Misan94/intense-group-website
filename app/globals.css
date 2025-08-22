@@ -42,18 +42,11 @@
   }
   
   /* Preload Animation Styles */
-  .char {
-    display: inline-block;
-    will-change: transform, opacity;
-    transform-origin: center bottom;
-    backface-visibility: hidden;
+  .preload-typography {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  
-  .preload-typography {
-    perspective: 1000px;
-    transform-style: preserve-3d;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 }
 
