@@ -29,36 +29,31 @@ export default function WhatWeDoSection() {
   const cards = [
     {
       id: 0,
-      title: "THE NEW STANDARD IN",
-      subtitle: "GROWTH STRATEGY",
+      title: "GROWTH STRATEGY",
       infoBox1: "STRATEGIC ALIGNMENT",
       infoBox2: "MEASURABLE TARGETS"
     },
     {
       id: 1,
-      title: "THE NEW STANDARD IN",
-      subtitle: "CREATIVE EXCELLENCE",
+      title: "CREATIVE EXCELLENCE",
       infoBox1: "ATTENTION-EARNING CREATIVE",
       infoBox2: "ENGAGEMENT DRIVEN"
     },
     {
       id: 2,
-      title: "THE NEW STANDARD IN",
-      subtitle: "PERFORMANCE MEDIA",
+      title: "PERFORMANCE MEDIA",
       infoBox1: "COMPOUND ROI GROWTH",
       infoBox2: "DATA-DRIVEN OPTIMIZATION"
     },
     {
       id: 3,
-      title: "THE NEW STANDARD IN",
-      subtitle: "DATA & AI SOLUTIONS",
+      title: "DATA SCIENCE",
       infoBox1: "INTELLIGENT DECISIONS",
       infoBox2: "ADVANCED ANALYTICS"
     },
     {
       id: 4,
-      title: "THE NEW STANDARD IN",
-      subtitle: "CUSTOM AI DEVELOPMENT",
+      title: "CUSTOM AI SOLUTIONS",
       infoBox1: "BESPOKE AI APPLICATIONS",
       infoBox2: "SEAMLESS INTEGRATION"
     }
@@ -335,9 +330,6 @@ export default function WhatWeDoSection() {
                     <div ref={typographyRef} className="space-y-4">
                       <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
                         {createAnimatedText(cards[currentCard].title)}
-                      </h2>
-                      <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
-                        {createAnimatedText(cards[currentCard].subtitle)}
                       </h2>
                     </div>
                   </div>
