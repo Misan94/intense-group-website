@@ -24,72 +24,65 @@ export default function OurStorySection() {
   }, [])
 
   return (
-    <section id="story" ref={sectionRef} className="py-24 bg-white">
+    <section id="story" ref={sectionRef} className="py-24 bg-white relative overflow-hidden">
       <div className="section-padding">
         <div className="container-max">
           {/* Section Header */}
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="text-center mb-16">
+            <div className="text-center mb-20">
               <span className="text-sm font-semibold text-gray-500 tracking-wider uppercase mb-4 block">
-                [01] Our Story
+                [01] OUR STORY
               </span>
-              <h2 className="font-dm-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
-                from vision
-              </h2>
-              <h2 className="font-dm-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
-                to{' '}
-                <span className="relative inline-block">
-                  global
-                  <div className="absolute -bottom-2 left-0 right-0 h-1 bg-brand-red"></div>
-                </span>
-              </h2>
-              <h2 className="font-dm-serif text-4xl md:text-6xl lg:text-7xl font-bold">
-                impact
-              </h2>
             </div>
           </div>
 
-          {/* Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-              <div className="space-y-6">
-                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Founded in <span className="font-semibold text-brand-red">Dhaka</span> with a bold mission to reinvent the fashion supply chain, NITEX has rapidly transformed into a multi-continent powerhouse.
-                </p>
-                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Today, our cross-functional teams work seamlessly from <span className="font-semibold text-brand-black">Dhaka to London, Barcelona and New York</span>, backed by a network of certified factories in Bangladesh.
-                </p>
-                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Through proprietary tech, we deliver <span className="font-semibold text-brand-red">creative excellence, speed and transparency</span>—redefining how brands design, sample and ship seasonal collections.
-                </p>
-              </div>
-
-              <div className="mt-12">
-                <button className="btn-primary">
-                  Inside Nitex
-                </button>
+          {/* Main Content Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start mt-8">
+            {/* Left Side - Large Typography */}
+            <div className="lg:col-span-7">
+              <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black mb-4">
+                  FROM VISION
+                </h2>
+                <div className="flex items-center mb-4">
+                  <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black mr-4">
+                    TO
+                  </h2>
+                  {/* Image placeholder - matching the design */}
+                  <div className="w-16 h-20 md:w-20 md:h-24 lg:w-24 lg:h-28 bg-gray-300 rounded-lg flex-shrink-0"></div>
+                </div>
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black">
+                  GLOBAL
+                </h2>
+                <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-brand-black">
+                  IMPACT
+                </h2>
               </div>
             </div>
 
-            {/* Right Visual */}
-            <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-              <div className="relative">
-                {/* Main Visual Container */}
-                <div className="bg-gray-100 rounded-2xl p-8 h-96 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-24 h-24 bg-brand-red rounded-full mx-auto mb-6 flex items-center justify-center">
-                      <span className="text-white font-dm-serif text-2xl font-bold">N</span>
+            {/* Right Side - Content Block */}
+            <div className="lg:col-span-5">
+              <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                {/* Red Content Block */}
+                <div className="bg-brand-red p-8 lg:p-10 rounded-2xl relative">
+                  <div className="space-y-6">
+                    <p className="text-lg md:text-xl text-white leading-relaxed font-medium">
+                      Founded in London with a bold mission to reinvent the marketing landscape, Intense Group has rapidly transformed into a multi-continent powerhouse.
+                    </p>
+                    <p className="text-lg md:text-xl text-white leading-relaxed font-medium">
+                      Today, our cross-functional teams work seamlessly from London to Barcelona, backed by a network of specialist agencies and partners. Through proprietary tech, we deliver creative excellence, speed and transparency—redefining how brands design, sample and ship seasonal collections.
+                    </p>
+                  </div>
+
+                  {/* Inside Intense Group Button */}
+                  <div className="mt-8">
+                    <div className="inline-flex items-center">
+                      <div className="bg-brand-black text-white px-4 py-2 text-sm font-semibold tracking-wider uppercase">
+                        ▶ INSIDE INTENSE GROUP
+                      </div>
                     </div>
-                    <h3 className="font-dm-serif text-2xl font-bold mb-2">Global Network</h3>
-                    <p className="text-gray-600">Multi-continent operations</p>
                   </div>
                 </div>
-
-                {/* Floating Elements */}
-                <div className="absolute -top-4 -left-4 w-8 h-8 bg-brand-red rounded-full opacity-20"></div>
-                <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-brand-black rounded-full opacity-30"></div>
-                <div className="absolute top-1/2 -right-6 w-6 h-6 bg-brand-red rounded-full opacity-40"></div>
               </div>
             </div>
           </div>
@@ -101,7 +94,7 @@ export default function OurStorySection() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
                 {[
                   { city: 'London', country: 'United Kingdom', role: 'European Hub' },
-                  { city: 'Barcelona', country: 'Spain', role: 'Design Center' },
+                  { city: 'Barcelona', country: 'Spain', role: 'Creative Center' },
                 ].map((office, index) => (
                   <div key={office.city} className={`text-center animate-fade-in animation-delay-${index * 200}`}>
                     <div className="w-16 h-16 bg-brand-gray rounded-full mx-auto mb-4 flex items-center justify-center">
