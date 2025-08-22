@@ -33,68 +33,15 @@ export default function HeroSection() {
           className="absolute inset-0 w-full h-[120%] -top-[10%]"
           style={{ willChange: 'transform' }}
         >
-          {/* Image Placeholder - Environmental Mountain/Lake Scene */}
-          <div 
-            className="w-full h-full bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url('data:image/svg+xml;base64,${btoa(`
-                <svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Sky Gradient -->
-                  <defs>
-                    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
-                      <stop offset="50%" style="stop-color:#B0E0E6;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#F0F8FF;stop-opacity:1" />
-                    </linearGradient>
-                    <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" style="stop-color:#696969;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#2F4F4F;stop-opacity:1" />
-                    </linearGradient>
-                    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" style="stop-color:#4682B4;stop-opacity:0.8" />
-                      <stop offset="100%" style="stop-color:#1E3A8A;stop-opacity:0.9" />
-                    </linearGradient>
-                  </defs>
-                  
-                  <!-- Sky -->
-                  <rect width="1920" height="700" fill="url(#skyGradient)"/>
-                  
-                  <!-- Mountains (Background) -->
-                  <polygon points="0,600 400,300 800,450 1200,200 1600,400 1920,350 1920,700 0,700" fill="#8B9DC3" opacity="0.6"/>
-                  
-                  <!-- Mountains (Midground) -->
-                  <polygon points="0,650 300,400 600,500 900,300 1200,450 1500,250 1920,400 1920,700 0,700" fill="url(#mountainGradient)" opacity="0.8"/>
-                  
-                  <!-- Mountains (Foreground) -->
-                  <polygon points="0,700 200,500 500,600 800,400 1100,550 1400,350 1700,500 1920,450 1920,700" fill="#2F4F4F"/>
-                  
-                  <!-- Lake/Water -->
-                  <rect y="700" width="1920" height="380" fill="url(#waterGradient)"/>
-                  
-                  <!-- Mountain Reflections in Water -->
-                  <polygon points="0,700 200,900 500,800 800,1000 1100,850 1400,1050 1700,900 1920,950 1920,700" fill="#1E3A8A" opacity="0.3"/>
-                  
-                  <!-- Atmospheric Clouds -->
-                  <ellipse cx="300" cy="200" rx="150" ry="40" fill="white" opacity="0.7"/>
-                  <ellipse cx="800" cy="150" rx="200" ry="50" fill="white" opacity="0.6"/>
-                  <ellipse cx="1400" cy="180" rx="180" ry="45" fill="white" opacity="0.8"/>
-                  
-                  <!-- Foreground Elements -->
-                  <ellipse cx="100" cy="950" rx="80" ry="20" fill="#228B22" opacity="0.6"/>
-                  <ellipse cx="1800" cy="980" rx="100" ry="25" fill="#228B22" opacity="0.5"/>
-                  
-                  <!-- Text: "Environmental Placeholder" -->
-                  <text x="960" y="540" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white" opacity="0.9">
-                    ENVIRONMENTAL HERO BACKGROUND
-                  </text>
-                  <text x="960" y="590" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="white" opacity="0.7">
-                    Replace with high-resolution mountain/lake landscape image
-                  </text>
-                </svg>
-              `)})`,
-              backgroundPosition: 'center center',
-              backgroundSize: 'cover'
-            }}
+          {/* Hero Background Image - Optimized with Next.js Image */}
+          <Image
+            src="/hero-section.png"
+            alt="Environmental hero background"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={90}
+            sizes="100vw"
           />
           
           {/* Subtle Overlay for Text Readability */}
