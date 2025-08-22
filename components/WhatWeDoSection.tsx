@@ -375,7 +375,7 @@ export default function WhatWeDoSection() {
                   
                   {/* Left Side - Typography Area (60%) */}
                   <div className="lg:col-span-7">
-                    <div ref={typographyRef} className="space-y-6">
+                    <div ref={typographyRef} className="space-y-4">
                       <h2 className="font-dm-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
                         {createAnimatedText(cards[currentCard].title)}
                       </h2>
@@ -412,9 +412,9 @@ export default function WhatWeDoSection() {
                 </div>
 
                 {/* Sophisticated Bullet List */}
-                <div ref={infoBoxesRef} className="mt-12 lg:mt-16">
+                <div ref={infoBoxesRef} className="mt-6 lg:mt-8">
                   <div className="max-w-3xl">
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                       {/* Bullet Item 1 */}
                       <div className="bullet-item flex items-start space-x-4 group" style={{ willChange: 'transform' }}>
                         {/* Custom Checkmark Bullet */}
@@ -463,7 +463,7 @@ export default function WhatWeDoSection() {
                       </div>
 
                       {/* Connecting Line */}
-                      <div className="connecting-line ml-3 w-px h-4 bg-gradient-to-b from-brand-red/60 to-brand-red/20"></div>
+                      <div className="connecting-line ml-3 w-px h-3 bg-gradient-to-b from-brand-red/60 to-brand-red/20"></div>
 
                       {/* Bullet Item 2 */}
                       <div className="bullet-item flex items-start space-x-4 group" style={{ willChange: 'transform' }}>
