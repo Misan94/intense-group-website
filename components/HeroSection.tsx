@@ -158,14 +158,14 @@ export default function HeroSection() {
     const nextWordIndex = (currentIndex + 1) % rotatingWords.length
     const nextWord = rotatingWords[nextWordIndex]
     
-    console.log(`Starting glitch transition: ${currentWord} (${currentIndex}) → ${nextWord} (${nextWordIndex})`)
+
 
     const glitchTimeline = gsap.timeline({
       onComplete: () => {
         setIsGlitching(false)
         setCurrentWordIndex(nextWordIndex)
         currentWordIndexRef.current = nextWordIndex
-        console.log(`Transitioning to word ${nextWordIndex}: ${rotatingWords[nextWordIndex]}`)
+
         // Start next transition after 3 seconds
         setTimeout(() => {
           startGlitchTransition()
