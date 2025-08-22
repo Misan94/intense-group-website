@@ -230,8 +230,8 @@ export default function OurStorySection() {
          playsInline
          style={{ willChange: 'transform' }}
        >
-         <source src="/our-story.webm" type="video/webm" />
-         {/* Fallback for browsers that don't support webm */}
+         <source src="/our-story.mp4" type="video/mp4" />
+         {/* Fallback for browsers that don't support video */}
          Your browser does not support the video tag.
        </video>
       <div className="section-padding relative z-10">

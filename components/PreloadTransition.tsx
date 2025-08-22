@@ -2,47 +2,41 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
+import Image from 'next/image'
 
 interface PreloadTransitionProps {
   onComplete: () => void
 }
 
 export default function PreloadTransition({ onComplete }: PreloadTransitionProps) {
-  const [transitionPhase, setTransitionPhase] = useState<'initial' | 'rising' | 'complete'>('initial')
+  const [transitionPhase, setTransitionPhase] = useState<'initial' | 'zooming' | 'revealing' | 'complete'>('initial')
   const [showSkipButton, setShowSkipButton] = useState(false)
-  const [fontSize, setFontSize] = useState('text-6xl md:text-7xl lg:text-8xl xl:text-9xl')
   
   const containerRef = useRef<HTMLDivElement>(null)
-  const typographyRef = useRef<HTMLDivElement>(null)
+  const logoRef = useRef<HTMLDivElement>(null)
+  const backgroundRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const skipTimerRef = useRef<NodeJS.Timeout>()
 
   // Preload critical resources
   const preloadResources = async () => {
     try {
+      // Preload logo image
+      const logoImage = new window.Image()
+      logoImage.src = '/logo.png'
+      await new Promise((resolve, reject) => {
+        logoImage.onload = resolve
+        logoImage.onerror = reject
+      })
+      
       // Preload fonts
       await document.fonts.load('bold 1em "DM Serif Display"')
       await document.fonts.load('normal 1em "Quicksand"')
       return true
     } catch (error) {
-      console.warn('Font preloading failed:', error)
+      console.warn('Resource preloading failed:', error)
       return true // Continue anyway
-    }
-  }
-
-  // Calculate responsive font size to ensure text fits
-  const getResponsiveTextSize = () => {
-    const screenWidth = window.innerWidth
-    const screenHeight = window.innerHeight
-    
-    if (screenWidth < 640) {
-      return 'text-4xl md:text-5xl' // Mobile
-    } else if (screenWidth < 1024) {
-      return 'text-5xl md:text-6xl lg:text-7xl' // Tablet
-    } else if (screenHeight < 700) {
-      return 'text-6xl md:text-7xl lg:text-8xl' // Short desktop screens
-    } else {
-      return 'text-6xl md:text-7xl lg:text-8xl xl:text-9xl' // Full desktop
     }
   }
 
@@ -52,24 +46,19 @@ export default function PreloadTransition({ onComplete }: PreloadTransitionProps
     const isTablet = window.innerWidth < 1024
     
     return {
-      finalY: isMobile ? -250 : isTablet ? -350 : -450,
-      duration: isMobile ? 1.5 : 2,
-      totalDuration: 3 // Fixed 3 seconds total
+      // Zoom levels - start extremely zoomed in
+      initialScale: isMobile ? 15 : isTablet ? 20 : 25,
+      finalScale: 1,
+      // Animation durations
+      zoomDuration: isMobile ? 2 : 2.5,
+      revealDuration: isMobile ? 1 : 1.5,
+      totalDuration: isMobile ? 3.5 : 4
     }
   }
 
-  // Calculate initial position to ensure full text visibility
-  const getInitialPosition = () => {
-    const isMobile = window.innerWidth < 768
-    return {
-      bottom: isMobile ? 40 : 60,
-      left: isMobile ? 16 : 32
-    }
-  }
-
-  // Create simplified animation timeline
+  // Create cinematic logo zoom timeline
   const createAnimationTimeline = () => {
-    if (!typographyRef.current || !containerRef.current) return
+    if (!logoRef.current || !containerRef.current || !backgroundRef.current || !overlayRef.current) return
 
     const values = getAnimationValues()
     
@@ -85,21 +74,39 @@ export default function PreloadTransition({ onComplete }: PreloadTransitionProps
       }
     })
 
-    // Phase 1: Instant show (0s)
-    tl.set(typographyRef.current, {
+    // Initial state - extreme zoom with overlay
+    tl.set(logoRef.current, {
+      scale: values.initialScale,
       opacity: 1,
-      y: 0,
-      visibility: 'visible'
+      transformOrigin: 'center center'
+    })
+    .set(overlayRef.current, {
+      opacity: 0.8
+    })
+    .set(backgroundRef.current, {
+      opacity: 0
     })
 
-    // Phase 2: Rising animation (0.5s delay, then 2s duration)
-    tl.to(typographyRef.current, {
-      y: values.finalY,
-      duration: values.duration,
-      ease: "power3.inOut",
-      delay: 0.5,
-      onStart: () => setTransitionPhase('rising')
+    // Phase 1: Zoom out reveal (0-2.5s)
+    tl.to(logoRef.current, {
+      scale: values.finalScale,
+      duration: values.zoomDuration,
+      ease: "power2.out",
+      onStart: () => setTransitionPhase('zooming')
     })
+    .to(overlayRef.current, {
+      opacity: 0,
+      duration: values.zoomDuration * 0.7,
+      ease: "power2.inOut"
+    }, 0.3)
+
+    // Phase 2: Background reveal (2s-4s)
+    tl.to(backgroundRef.current, {
+      opacity: 1,
+      duration: values.revealDuration,
+      ease: "power2.inOut",
+      onStart: () => setTransitionPhase('revealing')
+    }, "-=0.5")
 
     return tl
   }
@@ -135,9 +142,6 @@ export default function PreloadTransition({ onComplete }: PreloadTransitionProps
       return
     }
 
-    // Set responsive font size
-    setFontSize(getResponsiveTextSize())
-
     const initAnimation = async () => {
       // Preload resources
       await preloadResources()
@@ -145,15 +149,15 @@ export default function PreloadTransition({ onComplete }: PreloadTransitionProps
       // Small delay to ensure DOM is ready
       setTimeout(() => {
         timelineRef.current = createAnimationTimeline()
-      }, 100)
+      }, 200)
     }
 
     initAnimation()
 
-    // Show skip button after 1.5 seconds
+    // Show skip button after 2 seconds
     skipTimerRef.current = setTimeout(() => {
       setShowSkipButton(true)
-    }, 1500)
+    }, 2000)
 
     return () => {
       if (timelineRef.current) {
@@ -165,60 +169,85 @@ export default function PreloadTransition({ onComplete }: PreloadTransitionProps
     }
   }, [onComplete])
 
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      setFontSize(getResponsiveTextSize())
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  const position = getInitialPosition()
-
   return (
     <div 
       ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-black overflow-visible"
-      style={{ 
-        willChange: 'transform',
-        padding: '40px'
-      }}
+      className="fixed inset-0 z-[9999] bg-black overflow-hidden flex items-center justify-center"
+      style={{ willChange: 'transform' }}
     >
-      {/* Main Typography */}
+      {/* Background Elements - Hidden Initially */}
       <div 
-        ref={typographyRef}
-        className="absolute"
+        ref={backgroundRef}
+        className="absolute inset-0 opacity-0"
+        style={{ willChange: 'opacity' }}
+      >
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-green-900/20 to-amber-800/20" />
+        
+        {/* Subtle Pattern Overlay */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, rgba(255, 206, 84, 0.1) 0%, transparent 50%)
+            `
+          }}
+        />
+      </div>
+
+      {/* Logo Container */}
+      <div 
+        ref={logoRef}
+        className="relative z-10 flex items-center justify-center"
         style={{ 
-          bottom: `${position.bottom}px`,
-          left: `${position.left}px`,
           willChange: 'transform',
-          maxWidth: `calc(100vw - ${position.left * 2}px)`,
-          lineHeight: '0.85'
+          transformOrigin: 'center center'
         }}
       >
-        <h1 className={`font-dm-serif ${fontSize} font-bold leading-none text-yellow-400 mb-2`}>
-          The
-        </h1>
-        <h1 className={`font-dm-serif ${fontSize} font-bold leading-none text-yellow-400 mb-2`}>
-          Intense
-        </h1>
-        <h1 className={`font-dm-serif ${fontSize} font-bold leading-none text-yellow-400`}>
-          Group
-        </h1>
+        <Image
+          src="/logo.png"
+          alt="Intense Group"
+          width={200}
+          height={67}
+          className="w-auto h-16 md:h-20 lg:h-24 object-contain brightness-0 invert"
+          priority
+          style={{ willChange: 'transform' }}
+        />
       </div>
+
+      {/* Dark Overlay - Fades Out During Animation */}
+      <div 
+        ref={overlayRef}
+        className="absolute inset-0 bg-black/80 z-5"
+        style={{ willChange: 'opacity' }}
+      />
 
       {/* Skip Button */}
       {showSkipButton && (
         <button
           onClick={skipAnimation}
-          className="fixed top-8 right-8 text-yellow-400/70 hover:text-yellow-400 text-sm font-medium transition-colors duration-200 z-10"
+          className="fixed top-8 right-8 text-white/70 hover:text-white text-sm font-medium transition-colors duration-200 z-20"
           aria-label="Skip animation"
         >
           Skip →
         </button>
       )}
+
+      {/* Phase Indicator */}
+      <div className="fixed bottom-8 left-8 z-20">
+        <div className="flex items-center space-x-3">
+          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            transitionPhase === 'initial' ? 'bg-white' : 'bg-white/30'
+          }`} />
+          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            transitionPhase === 'zooming' ? 'bg-white' : 'bg-white/30'
+          }`} />
+          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            transitionPhase === 'revealing' ? 'bg-white' : 'bg-white/30'
+          }`} />
+        </div>
+      </div>
     </div>
   )
 }
