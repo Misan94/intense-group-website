@@ -22,7 +22,7 @@ export default function HeroSection() {
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
             
             {/* Main Headline - Centered */}
-                               <h1 className="font-fraunces text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-black mb-6">
+                               <h1 className="font-fraunces text-5xl md:text-[5rem] lg:text-[6.5rem] xl:text-[8rem] font-bold leading-none tracking-tight text-black mb-6">
               <span className={`block transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 A DECADE OF
               </span>
