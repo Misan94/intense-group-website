@@ -38,15 +38,15 @@ export default function HeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="section-padding relative z-10 w-full min-h-screen flex items-center">
-        <div className="container-max">
+      <div className="relative z-10 w-full min-h-screen flex items-center">
+        <div className="w-full">
           <div className="flex items-center min-h-[80vh]">
             
-            {/* Brand Typography - Full Width */}
-            <div className="w-full">
+            {/* Brand Typography - Left Positioned */}
+            <div className="ml-8 md:ml-12 lg:ml-16 xl:ml-20">
               <div className={`transition-all duration-1500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                 {/* Brand Name - Large Golden Typography */}
-                <div className="mb-8 text-left">
+                <div className="mb-8">
                   <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400 mb-4">
                     The
                   </h1>
