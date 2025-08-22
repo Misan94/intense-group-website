@@ -40,14 +40,6 @@
   .gradient-text {
     @apply bg-gradient-to-r from-brand-black to-brand-red bg-clip-text text-transparent;
   }
-  
-  /* Preload Animation Styles */
-  .preload-typography {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    will-change: transform;
-    backface-visibility: hidden;
-  }
 }
 
 @layer utilities {

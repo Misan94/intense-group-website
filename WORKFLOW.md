@@ -110,7 +110,7 @@ type(scope): description
 
 ### Examples
 ```bash
-feat(hero): add logo zoom preload animation
+feat(hero): add responsive hero section
 fix(navigation): resolve mobile menu crash
 docs(readme): update deployment instructions
 style(components): improve GSAP animation organization
@@ -156,7 +156,7 @@ style(components): improve GSAP animation organization
 
 ### Current Project Features
 ```
-feature/preload-transitions
+feature/responsive-design
 feature/scroll-animations
 feature/navigation-system
 feature/video-backgrounds
