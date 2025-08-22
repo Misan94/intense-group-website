@@ -107,7 +107,18 @@ export default function WhatWeDoSection() {
     // Clamp to valid range
     const clampedZone = Math.max(0, Math.min(currentZone, totalCards - 1))
     
-    // Determine if in transition phase (15-85% of zone)
+    // Special handling for the last card - no transitions after it
+    if (clampedZone === totalCards - 1) {
+      return {
+        activeCard: totalCards - 1,
+        nextCard: totalCards - 1,
+        zoneProgress,
+        transitionProgress: 1,
+        isInTransition: false
+      }
+    }
+    
+    // Determine if in transition phase (15-85% of zone) for non-final cards
     const transitionStart = 0.15
     const transitionEnd = 0.85
     const inTransition = zoneProgress >= transitionStart && zoneProgress <= transitionEnd
@@ -116,14 +127,14 @@ export default function WhatWeDoSection() {
       const transProgress = (zoneProgress - transitionStart) / (transitionEnd - transitionStart)
       return {
         activeCard: clampedZone,
-        nextCard: Math.min(clampedZone + 1, totalCards - 1),
+        nextCard: clampedZone + 1,
         zoneProgress,
         transitionProgress: transProgress,
         isInTransition: true
       }
     } else {
       // In hold phase
-      const finalCard = zoneProgress > 0.5 ? Math.min(clampedZone + 1, totalCards - 1) : clampedZone
+      const finalCard = zoneProgress > 0.5 ? clampedZone + 1 : clampedZone
       return {
         activeCard: finalCard,
         nextCard: finalCard,
