@@ -236,7 +236,7 @@ export default function WhatWeDoSection() {
     
     // Update progress bar
     if (progressBarRef.current) {
-      gsap.set(progressBarRef.current, { scaleX: progress })
+      gsap.set(progressBarRef.current, { scaleY: progress })
     }
   }
 
@@ -411,47 +411,61 @@ export default function WhatWeDoSection() {
           </div>
         </div>
 
-        {/* Fixed Navigation & Progress - Bottom of sticky content */}
-        <div className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 transition-all duration-500 ${
-          isScrollTriggerActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
+        {/* Vertical Navigation & Progress - Left side */}
+        <div className={`fixed left-8 top-1/2 transform -translate-y-1/2 z-20 transition-all duration-500 ${
+          isScrollTriggerActive ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8 pointer-events-none'
         }`}>
-          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
             
-            {/* Dot Navigation */}
-            <div className="flex items-center justify-center mb-4 space-x-4 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
+            {/* Vertical Progress Bar */}
+            <div className="relative mb-6">
+              <div className="w-1 h-32 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  ref={progressBarRef}
+                  className="w-full bg-brand-red origin-top scale-y-0"
+                  style={{ willChange: 'transform', transformOrigin: 'top' }}
+                ></div>
+              </div>
+            </div>
+            
+            {/* Vertical Dot Navigation */}
+            <div className="flex flex-col items-center space-y-4 mb-6">
               {cards.map((_, index) => {
                 const activeDot = getActiveDot()
                 return (
                   <button
                     key={index}
                     onClick={() => goToCard(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 relative ${
                       activeDot === index 
                         ? 'bg-brand-red scale-125' 
                         : 'bg-gray-300 hover:bg-gray-400'
                     }`}
                     aria-label={`Go to card ${index + 1}`}
-                  />
+                  >
+                    {/* Card number tooltip */}
+                    <span className={`absolute left-6 top-1/2 transform -translate-y-1/2 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
+                      activeDot === index 
+                        ? 'text-brand-red opacity-100' 
+                        : 'text-gray-500 opacity-0 group-hover:opacity-100'
+                    }`}>
+                      {index + 1}
+                    </span>
+                  </button>
                 )
               })}
             </div>
-            
-            {/* Progress Bar */}
-            <div className="max-w-xs mx-auto">
-              <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  ref={progressBarRef}
-                  className="h-full bg-brand-red origin-left scale-x-0"
-                  style={{ willChange: 'transform' }}
-                ></div>
-              </div>
-            </div>
 
             {/* Scroll Progress Indicator */}
-            <div className="text-center mt-2">
-              <span className="text-xs text-gray-500 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                {Math.round(scrollProgress * 100)}% • Card {currentCard + 1} of {cards.length}
-              </span>
+            <div className="text-left">
+              <div className="bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
+                <div className="text-xs text-gray-500 font-medium">
+                  {Math.round(scrollProgress * 100)}%
+                </div>
+                <div className="text-xs text-brand-black font-semibold">
+                  Card {currentCard + 1} of {cards.length}
+                </div>
+              </div>
             </div>
           </div>
         </div>
