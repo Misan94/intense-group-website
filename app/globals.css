@@ -64,4 +64,32 @@
   .animation-delay-600 {
     animation-delay: 600ms;
   }
+
+  /* Kinetic Typography Enhancements */
+  .kinetic-char {
+    display: inline-block;
+    will-change: transform, opacity, color;
+    transform-origin: center center;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .kinetic-word {
+    display: inline-block;
+    will-change: transform, opacity;
+    transform-origin: center center;
+    backface-visibility: hidden;
+  }
+
+  /* Subtle text shadow for depth */
+  .kinetic-char:hover {
+    text-shadow: 0 2px 8px rgba(254, 49, 2, 0.2);
+  }
+
+  /* Performance optimizations */
+  .kinetic-typography {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
 }
