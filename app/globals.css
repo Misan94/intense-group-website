@@ -93,50 +93,74 @@
     perspective: 1000px;
   }
 
-  /* Liquid Typography Effects */
-  .growth-char,
-  .creativity-char {
-    transition: all 0.3s ease;
-    will-change: transform, opacity;
-    transform-origin: center bottom;
+  /* Glitch Effect Enhancements */
+  .glitch-container {
+    position: relative;
+    overflow: hidden;
   }
 
-  .liquid-pool {
-    will-change: transform, opacity;
-    filter: blur(2px);
+  .glitch-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 0, 0.1) 2px,
+      rgba(0, 255, 0, 0.1) 4px
+    );
+    pointer-events: none;
+    opacity: 0;
+    animation: scanlines 0.1s linear infinite;
   }
 
-  .liquid-bubble {
-    will-change: transform, opacity, scale;
-    filter: blur(1px);
+  @keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
   }
 
-  .liquid-shimmer {
-    will-change: transform;
-    mix-blend-mode: overlay;
+  .glitch-rgb {
+    position: relative;
   }
 
-  /* Liquid drip effects */
-  .growth-char.dripping {
-    animation: liquidDrip 1.2s ease-in forwards;
+  .glitch-rgb::before,
+  .glitch-rgb::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    pointer-events: none;
   }
 
-  @keyframes liquidDrip {
-    0% {
-      transform: translateY(0) scaleY(1) scaleX(1);
-    }
-    50% {
-      transform: translateY(30px) scaleY(2) scaleX(0.8);
-    }
-    100% {
-      transform: translateY(60px) scaleY(0.2) scaleX(1.5);
-      opacity: 0.3;
-    }
+  .glitch-rgb::before {
+    color: #ff0000;
+    transform: translateX(-2px);
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
   }
 
-  /* Surface tension effects */
-  .liquid-surface {
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 40%, transparent 70%);
-    filter: blur(3px);
+  .glitch-rgb::after {
+    color: #00ffff;
+    transform: translateX(2px);
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  }
+
+  .binary-text {
+    font-family: 'Courier New', monospace;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+    letter-spacing: 2px;
+  }
+
+  .pixel-shift {
+    filter: contrast(200%) brightness(150%);
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
   }
 }

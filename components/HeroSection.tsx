@@ -6,21 +6,21 @@ import { gsap } from 'gsap'
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
+  const [isGlitching, setIsGlitching] = useState(false)
+  const [showCreativity, setShowCreativity] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   const headlineRef = useRef<HTMLHeadingElement>(null)
   const subtextRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
+  const glitchRef = useRef<HTMLDivElement>(null)
 
   // Text content for kinetic animation
   const headlineLines = [
     "A DECADE OF",
-    "DATA-DRIVEN GROWTH" // Will transition to "CREATIVITY"
+    "DATA-DRIVEN GROWTH"
   ]
 
-  // Liquid transition states
-  const [currentSecondLine, setCurrentSecondLine] = useState("DATA-DRIVEN GROWTH")
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const liquidContainerRef = useRef<HTMLDivElement>(null)
+  const creativityLine = "DATA-DRIVEN CREATIVITY"
 
   // Character splitting function
   const splitTextIntoChars = (text: string, lineIndex: number) => {
@@ -57,91 +57,6 @@ export default function HeroSection() {
 
     return () => clearTimeout(timer)
   }, [])
-
-  // Liquid Typography Flow Transition
-  const createLiquidTransition = () => {
-    if (!liquidContainerRef.current) return
-
-    const tl = gsap.timeline()
-    
-    // Phase 1: Melting Effect (GROWTH melts down)
-    const growthChars = liquidContainerRef.current.querySelectorAll('.growth-char')
-    
-    tl.to(growthChars, {
-      y: (i) => 50 + Math.random() * 30, // Varied drip distances
-      scaleY: (i) => 0.1 + Math.random() * 0.3, // Liquid stretch
-      scaleX: (i) => 1.2 + Math.random() * 0.5, // Liquid spread
-      opacity: 0.8,
-      duration: 1.2,
-      ease: "power2.in",
-      stagger: {
-        amount: 0.6,
-        from: "random"
-      }
-    })
-    
-    // Phase 2: Liquid pooling and bubbling
-    .to('.liquid-pool', {
-      scaleX: 1.5,
-      scaleY: 0.3,
-      opacity: 0.9,
-      duration: 0.8,
-      ease: "elastic.out(1, 0.3)"
-    }, "-=0.4")
-    
-    // Phase 3: Bubble formation and rise
-    .to('.liquid-bubble', {
-      y: -100,
-      scale: (i) => 0.8 + Math.random() * 0.4,
-      opacity: 1,
-      duration: 1.0,
-      ease: "power2.out",
-      stagger: 0.1
-    }, "-=0.2")
-    
-    // Phase 4: Formation of CREATIVITY
-    .to('.creativity-char', {
-      y: 0,
-      scaleY: 1,
-      scaleX: 1,
-      opacity: 1,
-      rotation: 0,
-      duration: 1.5,
-      ease: "elastic.out(1.2, 0.3)",
-      stagger: {
-        amount: 0.8,
-        from: "center"
-      }
-    }, "-=0.5")
-    
-    // Phase 5: Gradient shimmer effect
-    .to('.liquid-shimmer', {
-      x: '200%',
-      duration: 1.5,
-      ease: "power2.inOut"
-    }, "-=1.0")
-
-    return tl
-  }
-
-  // Start liquid transition after initial animation
-  const startLiquidCycle = () => {
-    const liquidTl = createLiquidTransition()
-    
-    if (liquidTl) {
-      liquidTl.call(() => {
-        setCurrentSecondLine("CREATIVITY")
-        setIsTransitioning(false)
-      })
-      
-      // Loop back after showing CREATIVITY
-      setTimeout(() => {
-        setCurrentSecondLine("DATA-DRIVEN GROWTH")
-        setIsTransitioning(true)
-        startLiquidCycle()
-      }, 4000)
-    }
-  }
 
   const startKineticAnimation = () => {
     if (!headlineRef.current) return
@@ -217,12 +132,111 @@ export default function HeroSection() {
       duration: 0.8,
       ease: "power2.out"
     }, "-=0.3")
-    .call(() => {
-      // Start liquid transition cycle after initial animation
+
+    // Start glitch transition after initial animation
+    tl.call(() => {
       setTimeout(() => {
-        setIsTransitioning(true)
-        startLiquidCycle()
-      }, 2000)
+        startGlitchTransition()
+      }, 2000) // Wait 2 seconds after initial animation
+    })
+  }
+
+  const startGlitchTransition = () => {
+    if (!headlineRef.current) return
+    
+    setIsGlitching(true)
+    
+    const growthLine = headlineRef.current.querySelector('[class*="line-1"]')
+    if (!growthLine) return
+
+    const glitchTimeline = gsap.timeline({
+      onComplete: () => {
+        setIsGlitching(false)
+        setShowCreativity(true)
+        setTimeout(() => {
+          setShowCreativity(false)
+          // Loop back to growth after 3 seconds
+          setTimeout(() => {
+            startGlitchTransition()
+          }, 1000)
+        }, 3000)
+      }
+    })
+
+    // Phase 1: Digital Glitch Corruption (0-0.8s)
+    glitchTimeline
+      .to(growthLine, {
+        duration: 0.1,
+        repeat: 8,
+        yoyo: true,
+        ease: "none",
+        textShadow: "2px 0 #ff0000, -2px 0 #00ffff, 4px 0 #ffff00", // RGB separation
+        x: () => gsap.utils.random(-5, 5),
+        skewX: () => gsap.utils.random(-10, 10),
+      })
+
+    // Phase 2: Scan Lines Effect (0.8-1.2s)
+    .to(growthLine, {
+      duration: 0.4,
+      backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)",
+      backgroundSize: "100% 4px",
+      ease: "power2.inOut"
+    })
+
+    // Phase 3: Binary Reveal (1.2-1.8s)
+    .call(() => {
+      // Convert text to binary representation
+      const originalText = "GROWTH"
+      const binaryText = originalText.split('').map(char => 
+        char.charCodeAt(0).toString(2).padStart(8, '0')
+      ).join(' ')
+      
+      if (growthLine) {
+        growthLine.textContent = binaryText
+        gsap.set(growthLine, {
+          fontFamily: "monospace",
+          fontSize: "0.6em",
+          color: "#00ff00",
+          textShadow: "0 0 10px #00ff00"
+        })
+      }
+    })
+
+    // Phase 4: Pixel Shifting & Reconstruction (1.8-2.5s)
+    .to(growthLine, {
+      duration: 0.3,
+      scale: 0.8,
+      opacity: 0.3,
+      filter: "blur(2px)",
+      ease: "power2.in"
+    })
+    .to(growthLine, {
+      duration: 0.4,
+      scale: 1,
+      opacity: 1,
+      filter: "blur(0px)",
+      ease: "elastic.out(1, 0.5)"
+    })
+
+    // Phase 5: Final Reconstruction to CREATIVITY
+    .call(() => {
+      if (growthLine) {
+        growthLine.textContent = "CREATIVITY"
+        gsap.set(growthLine, {
+          fontFamily: "var(--font-fraunces)",
+          fontSize: "1em",
+          color: "#000000",
+          textShadow: "none",
+          backgroundImage: "none"
+        })
+      }
+    })
+    
+    // Final RGB recombination effect
+    .from(growthLine, {
+      duration: 0.5,
+      textShadow: "3px 0 #ff0000, -3px 0 #00ffff",
+      ease: "power2.out"
     })
   }
 
@@ -241,107 +255,23 @@ export default function HeroSection() {
       <div className="relative z-10 w-full min-h-screen flex items-center justify-center">
         <div className="w-full max-w-6xl mx-auto px-4 text-center">
           
-          {/* Kinetic Typography Headline with Liquid Transition */}
+          {/* Kinetic Typography Headline */}
           <h1 
             ref={headlineRef}
             className="font-fraunces text-[2.7rem] md:text-[4.5rem] lg:text-[5.85rem] xl:text-[7.2rem] font-bold leading-none tracking-tight text-black mb-6"
           >
-            {/* First Line - Static */}
-            <div 
-              className="block mb-2"
-              style={{ 
-                perspective: '1000px',
-                transformStyle: 'preserve-3d' 
-              }}
-            >
-              {splitTextIntoWords(headlineLines[0], 0)}
-            </div>
-
-            {/* Second Line - Liquid Transition Container */}
-            <div 
-              ref={liquidContainerRef}
-              className="block relative"
-              style={{ 
-                perspective: '1000px',
-                transformStyle: 'preserve-3d',
-                minHeight: '1.2em',
-                overflow: 'visible'
-              }}
-            >
-              {/* Liquid Shimmer Effect */}
+            {headlineLines.map((line, lineIndex) => (
               <div 
-                className="liquid-shimmer absolute inset-0 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(254, 49, 2, 0.3) 50%, transparent 100%)',
-                  transform: 'translateX(-100%)',
-                  zIndex: 10
+                key={lineIndex}
+                className={`block mb-2 last:mb-0 line-${lineIndex}`}
+                style={{ 
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d' 
                 }}
-              />
-
-              {/* Current Text Display */}
-              <div className="relative z-5">
-                {currentSecondLine === "DATA-DRIVEN GROWTH" ? (
-                  <div className="flex flex-wrap justify-center">
-                    {currentSecondLine.split('').map((char, charIndex) => (
-                      <span
-                        key={`growth-${charIndex}`}
-                        className={`kinetic-char growth-char inline-block will-change-transform`}
-                        style={{ transformOrigin: 'center bottom' }}
-                      >
-                        {char === ' ' ? '\u00A0' : char}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap justify-center">
-                    {currentSecondLine.split('').map((char, charIndex) => (
-                      <span
-                        key={`creativity-${charIndex}`}
-                        className={`kinetic-char creativity-char inline-block will-change-transform`}
-                        style={{ 
-                          transformOrigin: 'center bottom',
-                          opacity: 0,
-                          transform: 'translateY(100px) scaleY(0.1)'
-                        }}
-                      >
-                        {char === ' ' ? '\u00A0' : char}
-                      </span>
-                    ))}
-                  </div>
-                )}
+              >
+                {splitTextIntoWords(line, lineIndex)}
               </div>
-
-              {/* Liquid Pool Effect */}
-              <div 
-                className="liquid-pool absolute bottom-0 left-1/2"
-                style={{
-                  width: '200px',
-                  height: '20px',
-                  background: 'radial-gradient(ellipse, rgba(0,0,0,0.6) 0%, transparent 70%)',
-                  borderRadius: '50%',
-                  opacity: 0,
-                  transform: 'translateX(-50%) scaleX(0) scaleY(0)'
-                }}
-              />
-
-              {/* Liquid Bubbles */}
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={`bubble-${i}`}
-                  className="liquid-bubble absolute"
-                  style={{
-                    width: `${8 + Math.random() * 12}px`,
-                    height: `${8 + Math.random() * 12}px`,
-                    background: 'radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 70%, transparent 100%)',
-                    borderRadius: '50%',
-                    left: `${30 + i * 25}%`,
-                    bottom: '20px',
-                    opacity: 0,
-                    transform: 'scale(0)'
-                  }}
-                />
-              ))}
-            </div>
+            ))}
           </h1>
           
           {/* Animated Subtext */}
