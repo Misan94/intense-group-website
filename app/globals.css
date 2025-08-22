@@ -92,4 +92,51 @@
     transform-style: preserve-3d;
     perspective: 1000px;
   }
+
+  /* Liquid Typography Effects */
+  .growth-char,
+  .creativity-char {
+    transition: all 0.3s ease;
+    will-change: transform, opacity;
+    transform-origin: center bottom;
+  }
+
+  .liquid-pool {
+    will-change: transform, opacity;
+    filter: blur(2px);
+  }
+
+  .liquid-bubble {
+    will-change: transform, opacity, scale;
+    filter: blur(1px);
+  }
+
+  .liquid-shimmer {
+    will-change: transform;
+    mix-blend-mode: overlay;
+  }
+
+  /* Liquid drip effects */
+  .growth-char.dripping {
+    animation: liquidDrip 1.2s ease-in forwards;
+  }
+
+  @keyframes liquidDrip {
+    0% {
+      transform: translateY(0) scaleY(1) scaleX(1);
+    }
+    50% {
+      transform: translateY(30px) scaleY(2) scaleX(0.8);
+    }
+    100% {
+      transform: translateY(60px) scaleY(0.2) scaleX(1.5);
+      opacity: 0.3;
+    }
+  }
+
+  /* Surface tension effects */
+  .liquid-surface {
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 40%, transparent 70%);
+    filter: blur(3px);
+  }
 }
