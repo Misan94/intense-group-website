@@ -2,17 +2,27 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+
+// Register ScrollTrigger plugin
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 export default function WhatWeDoSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentCard, setCurrentCard] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
+  const [transitionProgress, setTransitionProgress] = useState(0)
+  const [scrollProgress, setScrollProgress] = useState(0)
+  
   const sectionRef = useRef<HTMLElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const stickyContentRef = useRef<HTMLDivElement>(null)
   const typographyRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
   const infoBoxesRef = useRef<HTMLDivElement>(null)
-  const masterTimelineRef = useRef<gsap.core.Timeline | null>(null)
-  const progressRef = useRef<HTMLDivElement>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const transitionTimelineRef = useRef<gsap.core.Timeline | null>(null)
 
   // Card data for all 5 services
   const cards = [
@@ -71,275 +81,347 @@ export default function WhatWeDoSection() {
     return () => observer.disconnect()
   }, [])
 
-  // Split text into animated spans
+  // Split text into animated spans with character-level control
   const createAnimatedText = (text: string, className: string = '') => {
-    return text.split(' ').map((word, index) => (
+    return text.split(' ').map((word, wordIndex) => (
       <span 
-        key={index} 
-        className={`inline-block animated-word ${className}`}
+        key={wordIndex} 
+        className={`inline-block animated-word word-${wordIndex} ${className}`}
         style={{ marginRight: word === 'IN' ? '0' : '0.3em' }}
       >
-        {word}
+        {word.split('').map((char, charIndex) => (
+          <span 
+            key={charIndex}
+            className={`inline-block animated-char char-${wordIndex}-${charIndex}`}
+          >
+            {char}
+          </span>
+        ))}
       </span>
     ))
   }
 
-  // Create card transition timeline
-  const createCardTransition = (fromIndex: number, toIndex: number) => {
-    const tl = gsap.timeline()
+  // Calculate card transition based on scroll progress
+  const calculateCardTransition = (scrollProg: number) => {
+    const totalCards = 5
+    const currentZone = Math.floor(scrollProg * totalCards)
+    const zoneProgress = (scrollProg * totalCards) % 1
     
-    // Phase 1: Exit Animation (0.8s)
+    // Clamp to valid range
+    const clampedZone = Math.max(0, Math.min(currentZone, totalCards - 1))
+    
+    if (zoneProgress < 0.25) {
+      // Hold current card
+      return { activeCard: clampedZone, transitionProgress: 0, isTransitioning: false }
+    } else if (zoneProgress > 0.75) {
+      // Hold next card
+      const nextCard = Math.min(clampedZone + 1, totalCards - 1)
+      return { activeCard: nextCard, transitionProgress: 1, isTransitioning: false }
+    } else {
+      // Active transition
+      const transProgress = (zoneProgress - 0.25) / 0.5
+      return { 
+        activeCard: clampedZone, 
+        nextCard: Math.min(clampedZone + 1, totalCards - 1),
+        transitionProgress: transProgress,
+        isTransitioning: true
+      }
+    }
+  }
+
+  // Create transition timeline (paused, controlled by scroll)
+  const createTransitionTimeline = () => {
+    const tl = gsap.timeline({ paused: true })
+    
+    // Exit phase (0 - 0.5)
     tl.to('.animated-word', {
       x: -100,
       opacity: 0,
-      duration: 0.8,
-      stagger: 0.05,
+      duration: 0.5,
+      stagger: 0.02,
       ease: 'power2.in'
-    })
+    }, 0)
     .to(imageRef.current, {
       scale: 0.9,
       opacity: 0,
-      duration: 0.8,
+      rotation: -2,
+      duration: 0.5,
       ease: 'power2.in'
-    }, '<')
+    }, 0)
     .to('.info-box', {
       y: 50,
       opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
+      duration: 0.5,
+      stagger: 0.05,
       ease: 'power2.in'
-    }, '<')
+    }, 0)
 
-    // Phase 2: Content Switch (0.2s)
-    .call(() => {
-      setCurrentCard(toIndex)
-    })
-    .set('.animated-word', { x: 100 })
-    .set(imageRef.current, { scale: 1.1, rotation: 2 })
-    .set('.info-box', { y: 30 })
-
-    // Phase 3: Enter Animation (1.0s)
+    // Enter phase (0.5 - 1.0)
+    .set('.animated-word', { x: 100 }, 0.5)
+    .set(imageRef.current, { scale: 1.1, rotation: 2 }, 0.5)
+    .set('.info-box', { y: 30 }, 0.5)
+    
     .to('.animated-word', {
       x: 0,
       opacity: 1,
-      duration: 1.0,
-      stagger: 0.05,
+      duration: 0.5,
+      stagger: 0.02,
       ease: 'power2.out'
-    })
+    }, 0.5)
     .to(imageRef.current, {
       scale: 1,
       opacity: 1,
       rotation: 0,
-      duration: 1.0,
+      duration: 0.5,
       ease: 'power2.out'
-    }, '<0.2')
+    }, 0.5)
     .to('.info-box', {
       y: 0,
       opacity: 1,
-      duration: 1.0,
-      stagger: 0.1,
+      duration: 0.5,
+      stagger: 0.05,
       ease: 'power2.out'
-    }, '<0.3')
+    }, 0.5)
 
     return tl
   }
 
-  // Initialize GSAP master timeline
+  // Initialize ScrollTrigger and transition timeline
   useEffect(() => {
     if (!isVisible || typeof window === 'undefined') return
 
-    // Create master timeline
-    const masterTL = gsap.timeline({ 
-      repeat: -1,
-      paused: isPaused
-    })
+    // Create transition timeline
+    const transitionTL = createTransitionTimeline()
+    transitionTimelineRef.current = transitionTL
 
-    // Add each card with transitions
-    cards.forEach((card, index) => {
-      const nextIndex = (index + 1) % cards.length
-      
-      if (index === 0) {
-        // First card - just show it
-        masterTL.set('.animated-word', { opacity: 1, x: 0 })
-        .set(imageRef.current, { opacity: 1, scale: 1 })
-        .set('.info-box', { opacity: 1, y: 0 })
-        .to({}, { duration: 4 }) // Hold for 4 seconds
-      } else {
-        // Add transition to next card
-        masterTL.add(createCardTransition(index - 1, index))
-        .to({}, { duration: 3 }) // Hold for 3 seconds after transition
+    // Main ScrollTrigger for the section
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: 'top top',
+      end: 'bottom bottom',
+      pin: stickyContentRef.current,
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const progress = self.progress
+        setScrollProgress(progress)
+        
+        // Calculate current card and transition state
+        const { activeCard, nextCard, transitionProgress: transProgress, isTransitioning } = calculateCardTransition(progress)
+        
+        // Update states
+        if (!isTransitioning) {
+          setCurrentCard(activeCard)
+          setTransitionProgress(0)
+          // Reset timeline to show current card
+          transitionTL.progress(transProgress)
+        } else {
+          // During transition, update content and animate
+          if (transProgress < 0.5) {
+            setCurrentCard(activeCard)
+          } else {
+            setCurrentCard(nextCard || activeCard)
+          }
+          setTransitionProgress(transProgress)
+          transitionTL.progress(transProgress)
+        }
+
+        // Update progress bar
+        if (progressBarRef.current) {
+          gsap.set(progressBarRef.current, { scaleX: progress })
+        }
       }
     })
 
-    // Add final transition back to first card
-    masterTL.add(createCardTransition(cards.length - 1, 0))
-
-    // Progress bar animation
-    const progressTL = gsap.timeline({ repeat: -1 })
-    progressTL.to(progressRef.current, {
-      scaleX: 1,
-      duration: 4,
-      ease: 'none'
-    })
-    .set(progressRef.current, { scaleX: 0 })
-
-    masterTimelineRef.current = masterTL
-    masterTL.play()
+    // Initialize first card state
+    gsap.set('.animated-word', { opacity: 1, x: 0 })
+    gsap.set(imageRef.current, { opacity: 1, scale: 1, rotation: 0 })
+    gsap.set('.info-box', { opacity: 1, y: 0 })
 
     return () => {
-      masterTL.kill()
-      progressTL.kill()
+      scrollTrigger.kill()
+      transitionTL.kill()
     }
-  }, [isVisible, isPaused])
+  }, [isVisible])
 
-  // Handle dot navigation
+  // Handle dot navigation with smooth scrolling
   const goToCard = (index: number) => {
-    if (masterTimelineRef.current) {
-      setCurrentCard(index)
-      // Calculate timeline position for the card
-      const cardDuration = 7 // 2s transition + 4s hold + 1s buffer
-      masterTimelineRef.current.seek(index * cardDuration)
-    }
+    if (!sectionRef.current) return
+    
+    // Calculate scroll position for the target card
+    const sectionTop = sectionRef.current.offsetTop
+    const cardProgress = index / 5 // Each card is 1/5 of total progress
+    const sectionHeight = sectionRef.current.offsetHeight
+    const targetScroll = sectionTop + (cardProgress * sectionHeight * 0.8) // 80% to center the card
+    
+    // Smooth scroll to target
+    window.scrollTo({
+      top: targetScroll,
+      behavior: 'smooth'
+    })
   }
 
-  // Handle hover pause/play
-  const handleMouseEnter = () => {
-    setIsPaused(true)
-    if (masterTimelineRef.current) {
-      masterTimelineRef.current.pause()
+  // Get active dot based on current card and transition progress
+  const getActiveDot = () => {
+    if (transitionProgress > 0.5) {
+      return Math.min(currentCard + 1, cards.length - 1)
     }
-  }
-
-  const handleMouseLeave = () => {
-    setIsPaused(false)
-    if (masterTimelineRef.current) {
-      masterTimelineRef.current.play()
-    }
+    return currentCard
   }
 
   return (
     <section 
       id="what-we-do" 
       ref={sectionRef} 
-      className="py-24 bg-white relative overflow-hidden"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="relative bg-white"
+      style={{ height: '500vh' }} // 5x viewport height for scroll zones
     >
-      <div className="section-padding">
-        <div className="container-max">
-          {/* Section Header */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="text-center mb-16">
-              <span className="text-sm font-semibold text-gray-500 tracking-wider uppercase mb-4 block">
-                [02] WHAT WE DO
-              </span>
-            </div>
-          </div>
-
-          {/* Main Content Layout */}
-          <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start min-h-[600px]">
+      {/* Scroll Container */}
+      <div ref={scrollContainerRef} className="relative w-full h-full">
+        
+        {/* Sticky Content */}
+        <div 
+          ref={stickyContentRef}
+          className="sticky top-0 h-screen w-full flex flex-col justify-center py-24 overflow-hidden"
+        >
+          <div className="section-padding">
+            <div className="container-max">
               
-              {/* Left Side - Typography Area (60%) */}
-              <div className="lg:col-span-7">
-                <div ref={typographyRef} className="space-y-4">
-                  <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
-                    {createAnimatedText(cards[currentCard].title)}
-                  </h2>
-                  <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
-                    {createAnimatedText(cards[currentCard].subtitle)}
-                  </h2>
+              {/* Section Header */}
+              <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <div className="text-center mb-16">
+                  <span className="text-sm font-semibold text-gray-500 tracking-wider uppercase mb-4 block">
+                    [02] WHAT WE DO
+                  </span>
                 </div>
               </div>
 
-              {/* Right Side - Image Area (40%) */}
-              <div className="lg:col-span-5">
-                <div 
-                  ref={imageRef}
-                  className="relative h-96 lg:h-[500px] bg-gray-200 rounded-2xl overflow-hidden"
-                >
-                  {/* Industrial machinery placeholder */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400"></div>
-                  <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+              {/* Main Content Layout */}
+              <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start min-h-[500px]">
                   
-                  {/* Placeholder elements to simulate machinery */}
-                  <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-gray-500 rounded-full opacity-60"></div>
-                  <div className="absolute top-1/2 right-1/4 w-8 h-24 bg-gray-600 rounded-lg opacity-70"></div>
-                  <div className="absolute bottom-1/4 left-1/3 w-20 h-8 bg-gray-500 rounded opacity-50"></div>
-                  
-                  {/* Overlay text */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="text-xs text-white font-medium opacity-80">
-                      INDUSTRIAL PRECISION MEETS DIGITAL INNOVATION
+                  {/* Left Side - Typography Area (60%) */}
+                  <div className="lg:col-span-7">
+                    <div ref={typographyRef} className="space-y-4">
+                      <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
+                        {createAnimatedText(cards[currentCard].title)}
+                      </h2>
+                      <h2 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight text-brand-black">
+                        {createAnimatedText(cards[currentCard].subtitle)}
+                      </h2>
+                    </div>
+                  </div>
+
+                  {/* Right Side - Image Area (40%) */}
+                  <div className="lg:col-span-5">
+                    <div 
+                      ref={imageRef}
+                      className="relative h-96 lg:h-[500px] bg-gray-200 rounded-2xl overflow-hidden"
+                      style={{ willChange: 'transform' }}
+                    >
+                      {/* Industrial machinery placeholder */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400"></div>
+                      <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                      
+                      {/* Placeholder elements to simulate machinery */}
+                      <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-gray-500 rounded-full opacity-60"></div>
+                      <div className="absolute top-1/2 right-1/4 w-8 h-24 bg-gray-600 rounded-lg opacity-70"></div>
+                      <div className="absolute bottom-1/4 left-1/3 w-20 h-8 bg-gray-500 rounded opacity-50"></div>
+                      
+                      {/* Overlay text */}
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="text-xs text-white font-medium opacity-80">
+                          INDUSTRIAL PRECISION MEETS DIGITAL INNOVATION
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Info Boxes */}
+                <div ref={infoBoxesRef} className="mt-12 lg:mt-16">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                    <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-brand-black rounded-full"></div>
+                        <span className="font-bold text-brand-black text-lg tracking-wide">
+                          {cards[currentCard].infoBox1}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-brand-black rounded-full"></div>
+                        <span className="font-bold text-brand-black text-lg tracking-wide">
+                          {cards[currentCard].infoBox2}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Info Boxes */}
-            <div ref={infoBoxesRef} className="mt-12 lg:mt-16">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-                <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-brand-black rounded-full"></div>
-                    <span className="font-bold text-brand-black text-lg tracking-wide">
-                      {cards[currentCard].infoBox1}
-                    </span>
-                  </div>
-                </div>
-                <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-brand-black rounded-full"></div>
-                    <span className="font-bold text-brand-black text-lg tracking-wide">
-                      {cards[currentCard].infoBox2}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
+        </div>
 
-          {/* Navigation Controls */}
+        {/* Fixed Navigation & Progress - Bottom of sticky content */}
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20">
           <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex items-center justify-center mt-16 space-x-4">
-              {/* Dot Navigation */}
-              {cards.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToCard(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentCard === index 
-                      ? 'bg-brand-red scale-125' 
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                  aria-label={`Go to card ${index + 1}`}
-                />
-              ))}
+            
+            {/* Dot Navigation */}
+            <div className="flex items-center justify-center mb-4 space-x-4 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
+              {cards.map((_, index) => {
+                const activeDot = getActiveDot()
+                return (
+                  <button
+                    key={index}
+                    onClick={() => goToCard(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      activeDot === index 
+                        ? 'bg-brand-red scale-125' 
+                        : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                    aria-label={`Go to card ${index + 1}`}
+                  />
+                )
+              })}
             </div>
             
             {/* Progress Bar */}
-            <div className="mt-8 max-w-xs mx-auto">
+            <div className="max-w-xs mx-auto">
               <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
                 <div 
-                  ref={progressRef}
+                  ref={progressBarRef}
                   className="h-full bg-brand-red origin-left scale-x-0"
+                  style={{ willChange: 'transform' }}
                 ></div>
               </div>
             </div>
-          </div>
 
-          {/* CTA Section */}
-          <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="text-center mt-16">
-              <button 
-                className="btn-primary text-lg px-8 py-4 hover:scale-105 transform transition-all duration-200"
-                onClick={() => {
-                  document.getElementById('communities')?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              >
-                See our services
-              </button>
+            {/* Scroll Progress Indicator */}
+            <div className="text-center mt-2">
+              <span className="text-xs text-gray-500 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                {Math.round(scrollProgress * 100)}% • Card {currentCard + 1} of {cards.length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section - At the very end */}
+        <div className="absolute bottom-0 left-0 right-0 py-16 bg-white">
+          <div className="section-padding">
+            <div className="container-max">
+              <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <div className="text-center">
+                  <button 
+                    className="btn-primary text-lg px-8 py-4 hover:scale-105 transform transition-all duration-200"
+                    onClick={() => {
+                      document.getElementById('communities')?.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                  >
+                    See our services
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

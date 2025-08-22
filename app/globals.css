@@ -58,4 +58,37 @@
   .animation-delay-600 {
     animation-delay: 600ms;
   }
+
+  /* GSAP Performance Optimizations */
+  .animated-word,
+  .animated-char {
+    will-change: transform, opacity;
+  }
+
+  .info-box {
+    will-change: transform, opacity;
+  }
+
+  /* Scroll-triggered section optimizations */
+  #what-we-do {
+    contain: layout style paint;
+  }
+
+  /* Mobile optimizations for scroll sections */
+  @media (max-width: 768px) {
+    #what-we-do {
+      height: 300vh !important; /* Reduced height for mobile */
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .animated-word,
+    .animated-char,
+    .info-box {
+      will-change: auto;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
 }
