@@ -60,7 +60,7 @@ export default function BeliefsSection() {
   ]
 
   return (
-    <section id="beliefs" ref={sectionRef} className="py-24 bg-white">
+    <section id="business-units" ref={sectionRef} className="py-24 bg-white">
       <div className="section-padding">
         <div className="container-max">
           {/* Section Header */}
