@@ -388,7 +388,7 @@ export default function WhatWeDoSection() {
                 {/* Info Boxes */}
                 <div ref={infoBoxesRef} className="mt-12 lg:mt-16">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-                    <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
+                    <div className="info-box bg-brand-red p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
                       <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-white rounded-full"></div>
                         <span className="font-bold text-white text-lg tracking-wide">
@@ -396,7 +396,7 @@ export default function WhatWeDoSection() {
                         </span>
                       </div>
                     </div>
-                    <div className="info-box bg-[#c8ff00] p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
+                    <div className="info-box bg-brand-red p-6 lg:p-8 rounded-2xl" style={{ willChange: 'transform' }}>
                       <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-white rounded-full"></div>
                         <span className="font-bold text-white text-lg tracking-wide">
