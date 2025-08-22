@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
 
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false)
@@ -11,51 +10,88 @@ export default function HeroSection() {
   }, [])
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-start overflow-hidden">
+      {/* Background - Natural/Outdoor Aesthetic */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="w-full h-full bg-gradient-to-br from-amber-900 via-green-900 to-amber-800"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 206, 84, 0.2) 0%, transparent 50%),
+              linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%)
+            `
+          }}
+        />
+        {/* Additional texture overlay */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, rgba(255, 206, 84, 0.1) 0%, transparent 50%)
+            `
+          }}
+        />
+        {/* Gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+      </div>
 
-
-      <div className="section-padding relative z-10 w-full">
-        <div className="container-max text-center">
-          {/* Main Heading */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h1 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-              A decade of{' '}
-              <span className="relative inline-block">
-                growth, creativity,
-                <div className="absolute -bottom-2 left-0 right-0 h-1 bg-brand-red transform scale-x-0 animate-[scaleX_1s_ease-out_0.5s_forwards] origin-left"></div>
-              </span>
-            </h1>
-            <h1 className="font-dm-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-              <span className="text-brand-red">data & AI</span>
-            </h1>
-          </div>
-
-          {/* CTA Button */}
-          <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex justify-center items-center mb-16">
-              <button className="btn-primary text-lg px-8 py-4 hover:scale-105 transform transition-all duration-200">
-                Explore #IntenseAt10
-              </button>
+      {/* Main Content */}
+      <div className="section-padding relative z-10 w-full min-h-screen flex items-center">
+        <div className="container-max">
+          <div className="flex items-center min-h-[80vh]">
+            
+            {/* Brand Typography - Full Width */}
+            <div className="w-full">
+              <div className={`transition-all duration-1500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+                {/* Brand Name - Large Golden Typography */}
+                <div className="mb-8">
+                  <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400 mb-4">
+                    Intense
+                  </h1>
+                  <h1 className="font-dm-serif text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none text-yellow-400 mb-2">
+                    Group
+                  </h1>
+                  <div className="text-yellow-400 text-xl md:text-2xl font-light tracking-wider">
+                    ™
+                  </div>
+                </div>
+              </div>
             </div>
+
+
           </div>
 
-          {/* Scroll Indicator */}
-          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-            <div className="flex flex-col items-center">
-              <span className="text-sm text-gray-500 mb-2">Scroll to explore</span>
-              <ChevronDown 
-                size={24} 
-                className="text-gray-400 animate-bounce cursor-pointer hover:text-brand-red transition-colors"
-                onClick={() => {
-                  document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              />
+          {/* Bottom Tagline */}
+          <div className="absolute bottom-20 left-0 right-0">
+            <div className={`section-padding transition-all duration-1500 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <div className="container-max">
+                <div className="text-center">
+                  <p className="text-yellow-400 text-lg md:text-xl font-light tracking-wide mb-2">
+                    A DECADE OF DATA-DRIVEN GROWTH AND CREATIVITY
+                  </p>
+                  <p className="text-yellow-400/70 text-sm md:text-base font-light tracking-wider">
+                    We unite strategy, performance, creative, data, and MarTech to move brands forward across Africa and Europe.
+                  </p>
+                  
+                  {/* Year indicator */}
+                  <div className="mt-8 flex items-center justify-center space-x-4">
+                    <div className="w-8 h-px bg-yellow-400/50"></div>
+                    <span className="text-yellow-400/70 text-sm font-medium">2025</span>
+                    <div className="w-8 h-px bg-yellow-400/50"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-
+      {/* Decorative Elements */}
+      <div className="absolute top-1/4 right-10 w-2 h-2 bg-yellow-400/30 rounded-full animate-pulse"></div>
+      <div className="absolute top-1/3 right-32 w-1 h-1 bg-yellow-400/50 rounded-full animate-pulse delay-300"></div>
+      <div className="absolute bottom-1/3 left-20 w-1.5 h-1.5 bg-yellow-400/40 rounded-full animate-pulse delay-700"></div>
     </section>
   )
 }
