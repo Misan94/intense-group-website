@@ -251,15 +251,15 @@ export default function OurStorySection() {
              <div className="lg:col-span-7">
                <div 
                  ref={typographyContainerRef}
-                 className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} text-right`}
+                 className={`transition-all duration-1000 delay-300 text-left ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                >
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4 text-right">
+                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4 text-left">
                    {createCharacterSpans('VISION.', 0)}
                  </h2>
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4 text-right">
+                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4 text-left">
                    {createCharacterSpans('ACTION.', 1)}
                  </h2>
-                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white text-right">
+                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white text-left">
                    {createCharacterSpans('GLOBAL IMPACT.', 2)}
                  </h2>
                </div>
