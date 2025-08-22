@@ -411,11 +411,11 @@ export default function WhatWeDoSection() {
           </div>
         </div>
 
-        {/* Vertical Navigation & Progress - Left side */}
-        <div className={`fixed left-8 top-1/2 transform -translate-y-1/2 z-20 transition-all duration-500 ${
-          isScrollTriggerActive ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8 pointer-events-none'
+        {/* Vertical Navigation & Progress - Right side */}
+        <div className={`fixed right-8 top-1/2 transform -translate-y-1/2 z-20 transition-all duration-500 ${
+          isScrollTriggerActive ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8 pointer-events-none'
         }`}>
-          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
+          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
             
             {/* Vertical Progress Bar */}
             <div className="relative mb-6">
@@ -436,7 +436,7 @@ export default function WhatWeDoSection() {
                   <button
                     key={index}
                     onClick={() => goToCard(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 relative ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 relative group ${
                       activeDot === index 
                         ? 'bg-brand-red scale-125' 
                         : 'bg-gray-300 hover:bg-gray-400'
@@ -444,7 +444,7 @@ export default function WhatWeDoSection() {
                     aria-label={`Go to card ${index + 1}`}
                   >
                     {/* Card number tooltip */}
-                    <span className={`absolute left-6 top-1/2 transform -translate-y-1/2 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
+                    <span className={`absolute right-6 top-1/2 transform -translate-y-1/2 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
                       activeDot === index 
                         ? 'text-brand-red opacity-100' 
                         : 'text-gray-500 opacity-0 group-hover:opacity-100'
@@ -457,7 +457,7 @@ export default function WhatWeDoSection() {
             </div>
 
             {/* Scroll Progress Indicator */}
-            <div className="text-left">
+            <div className="text-right">
               <div className="bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
                 <div className="text-xs text-gray-500 font-medium">
                   {Math.round(scrollProgress * 100)}%
