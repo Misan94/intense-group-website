@@ -12,17 +12,18 @@ if (typeof window !== 'undefined') {
 export default function WhatWeDoSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentCard, setCurrentCard] = useState(0)
-  const [transitionProgress, setTransitionProgress] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [transitionProgress, setTransitionProgress] = useState(0)
+  const [isInTransition, setIsInTransition] = useState(false)
   
   const sectionRef = useRef<HTMLElement>(null)
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const stickyContentRef = useRef<HTMLDivElement>(null)
   const typographyRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
   const infoBoxesRef = useRef<HTMLDivElement>(null)
-  const progressBarRef = useRef<HTMLDivElement>(null)
   const transitionTimelineRef = useRef<gsap.core.Timeline | null>(null)
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
 
   // Card data for all 5 services
   const cards = [
@@ -101,30 +102,39 @@ export default function WhatWeDoSection() {
     ))
   }
 
-  // Calculate card transition based on scroll progress
-  const calculateCardTransition = (scrollProg: number) => {
+  // Calculate card zone based on scroll progress
+  const calculateCardZone = (scrollProg: number) => {
     const totalCards = 5
-    const currentZone = Math.floor(scrollProg * totalCards)
-    const zoneProgress = (scrollProg * totalCards) % 1
+    const zoneSize = 1 / totalCards // 0.2 per card
+    const currentZone = Math.floor(scrollProg / zoneSize)
+    const zoneProgress = (scrollProg % zoneSize) / zoneSize
     
     // Clamp to valid range
     const clampedZone = Math.max(0, Math.min(currentZone, totalCards - 1))
     
-    if (zoneProgress < 0.25) {
-      // Hold current card
-      return { activeCard: clampedZone, transitionProgress: 0, isTransitioning: false }
-    } else if (zoneProgress > 0.75) {
-      // Hold next card
-      const nextCard = Math.min(clampedZone + 1, totalCards - 1)
-      return { activeCard: nextCard, transitionProgress: 1, isTransitioning: false }
-    } else {
-      // Active transition
-      const transProgress = (zoneProgress - 0.25) / 0.5
-      return { 
-        activeCard: clampedZone, 
+    // Determine if in transition phase (15-85% of zone)
+    const transitionStart = 0.15
+    const transitionEnd = 0.85
+    const inTransition = zoneProgress >= transitionStart && zoneProgress <= transitionEnd
+    
+    if (inTransition) {
+      const transProgress = (zoneProgress - transitionStart) / (transitionEnd - transitionStart)
+      return {
+        activeCard: clampedZone,
         nextCard: Math.min(clampedZone + 1, totalCards - 1),
+        zoneProgress,
         transitionProgress: transProgress,
-        isTransitioning: true
+        isInTransition: true
+      }
+    } else {
+      // In hold phase
+      const finalCard = zoneProgress > 0.5 ? Math.min(clampedZone + 1, totalCards - 1) : clampedZone
+      return {
+        activeCard: finalCard,
+        nextCard: finalCard,
+        zoneProgress,
+        transitionProgress: zoneProgress < 0.5 ? 0 : 1,
+        isInTransition: false
       }
     }
   }
@@ -186,6 +196,43 @@ export default function WhatWeDoSection() {
     return tl
   }
 
+  // Handle scroll progress updates
+  const handleScrollProgress = (progress: number) => {
+    const zoneData = calculateCardZone(progress)
+    
+    setScrollProgress(progress)
+    setIsInTransition(zoneData.isInTransition)
+    setTransitionProgress(zoneData.transitionProgress)
+    
+    if (zoneData.isInTransition) {
+      // During transition, update timeline progress
+      if (transitionTimelineRef.current) {
+        // Update content at midpoint (0.5)
+        if (zoneData.transitionProgress < 0.5) {
+          setCurrentCard(zoneData.activeCard)
+        } else {
+          setCurrentCard(zoneData.nextCard)
+        }
+        
+        // Update timeline progress
+        transitionTimelineRef.current.progress(zoneData.transitionProgress)
+      }
+    } else {
+      // In hold phase, set static state
+      setCurrentCard(zoneData.activeCard)
+      
+      // Reset timeline to appropriate state
+      if (transitionTimelineRef.current) {
+        transitionTimelineRef.current.progress(zoneData.transitionProgress)
+      }
+    }
+    
+    // Update progress bar
+    if (progressBarRef.current) {
+      gsap.set(progressBarRef.current, { scaleX: progress })
+    }
+  }
+
   // Initialize ScrollTrigger and transition timeline
   useEffect(() => {
     if (!isVisible || typeof window === 'undefined') return
@@ -201,36 +248,20 @@ export default function WhatWeDoSection() {
       end: 'bottom bottom',
       pin: stickyContentRef.current,
       scrub: 0.5,
+      anticipatePin: 1,
       onUpdate: (self) => {
-        const progress = self.progress
-        setScrollProgress(progress)
-        
-        // Calculate current card and transition state
-        const { activeCard, nextCard, transitionProgress: transProgress, isTransitioning } = calculateCardTransition(progress)
-        
-        // Update states
-        if (!isTransitioning) {
-          setCurrentCard(activeCard)
-          setTransitionProgress(0)
-          // Reset timeline to show current card
-          transitionTL.progress(transProgress)
-        } else {
-          // During transition, update content and animate
-          if (transProgress < 0.5) {
-            setCurrentCard(activeCard)
-          } else {
-            setCurrentCard(nextCard || activeCard)
-          }
-          setTransitionProgress(transProgress)
-          transitionTL.progress(transProgress)
-        }
-
-        // Update progress bar
-        if (progressBarRef.current) {
-          gsap.set(progressBarRef.current, { scaleX: progress })
-        }
+        handleScrollProgress(self.progress)
+      },
+      onRefresh: () => {
+        // Reset to first card on refresh
+        setCurrentCard(0)
+        setScrollProgress(0)
+        setTransitionProgress(0)
+        setIsInTransition(false)
       }
     })
+
+    scrollTriggerRef.current = scrollTrigger
 
     // Initialize first card state
     gsap.set('.animated-word', { opacity: 1, x: 0 })
@@ -244,14 +275,14 @@ export default function WhatWeDoSection() {
   }, [isVisible])
 
   // Handle dot navigation with smooth scrolling
-  const goToCard = (index: number) => {
+  const goToCard = (targetIndex: number) => {
     if (!sectionRef.current) return
     
     // Calculate scroll position for the target card
     const sectionTop = sectionRef.current.offsetTop
-    const cardProgress = index / 5 // Each card is 1/5 of total progress
+    const targetProgress = (targetIndex / 5) + (0.1 / 5) // Center of target zone
     const sectionHeight = sectionRef.current.offsetHeight
-    const targetScroll = sectionTop + (cardProgress * sectionHeight * 0.8) // 80% to center the card
+    const targetScroll = sectionTop + (targetProgress * sectionHeight * 0.8) // 80% to center the card
     
     // Smooth scroll to target
     window.scrollTo({
@@ -262,7 +293,7 @@ export default function WhatWeDoSection() {
 
   // Get active dot based on current card and transition progress
   const getActiveDot = () => {
-    if (transitionProgress > 0.5) {
+    if (isInTransition && transitionProgress > 0.5) {
       return Math.min(currentCard + 1, cards.length - 1)
     }
     return currentCard
@@ -276,7 +307,7 @@ export default function WhatWeDoSection() {
       style={{ height: '500vh' }} // 5x viewport height for scroll zones
     >
       {/* Scroll Container */}
-      <div ref={scrollContainerRef} className="relative w-full h-full">
+      <div className="relative w-full h-full">
         
         {/* Sticky Content */}
         <div 
