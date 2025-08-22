@@ -35,7 +35,7 @@ export default function OurStorySection() {
           {/* Section Header */}
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="text-center mb-16">
-              <span className="text-sm font-semibold text-gray-500 tracking-wider uppercase mb-4 block">
+              <span className="text-sm font-semibold text-white tracking-wider uppercase mb-4 block">
                 [01] OUR STORY
               </span>
             </div>
@@ -47,16 +47,16 @@ export default function OurStorySection() {
             <div className="lg:col-span-7">
               <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
-                  FROM VISION
+                  A DECADE OF
                 </h2>
                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white mb-4">
-                  TO
+                  DATA-DRIVEN
                 </h2>
                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white">
-                  GLOBAL
+                  GROWTH &
                 </h2>
                 <h2 className="font-dm-serif text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold leading-none tracking-tight text-white">
-                  IMPACT
+                  CREATIVITY
                 </h2>
               </div>
             </div>
