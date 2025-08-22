@@ -15,6 +15,7 @@ export default function WhatWeDoSection() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [transitionProgress, setTransitionProgress] = useState(0)
   const [isInTransition, setIsInTransition] = useState(false)
+  const [isScrollTriggerActive, setIsScrollTriggerActive] = useState(false)
   
   const sectionRef = useRef<HTMLElement>(null)
   const stickyContentRef = useRef<HTMLDivElement>(null)
@@ -258,12 +259,25 @@ export default function WhatWeDoSection() {
       onUpdate: (self) => {
         handleScrollProgress(self.progress)
       },
+      onEnter: () => {
+        setIsScrollTriggerActive(true)
+      },
+      onLeave: () => {
+        setIsScrollTriggerActive(false)
+      },
+      onEnterBack: () => {
+        setIsScrollTriggerActive(true)
+      },
+      onLeaveBack: () => {
+        setIsScrollTriggerActive(false)
+      },
       onRefresh: () => {
         // Reset to first card on refresh
         setCurrentCard(0)
         setScrollProgress(0)
         setTransitionProgress(0)
         setIsInTransition(false)
+        setIsScrollTriggerActive(false)
       }
     })
 
@@ -398,7 +412,9 @@ export default function WhatWeDoSection() {
         </div>
 
         {/* Fixed Navigation & Progress - Bottom of sticky content */}
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 transition-all duration-500 ${
+          isScrollTriggerActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
+        }`}>
           <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             
             {/* Dot Navigation */}
