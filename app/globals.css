@@ -60,6 +60,91 @@
   .animation-delay-400 {
     animation-delay: 400ms;
   }
+
+  /* Adaptive Glassmorphism Navigation Utilities */
+  .adaptive-glassmorphism-header {
+    /* GPU Acceleration for smooth transitions */
+    will-change: backdrop-filter, background-color, border-color;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Glassmorphism 2.0 Enhanced Effects */
+  .glassmorphism-enhanced {
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Responsive Glassmorphism Adjustments */
+  @media (max-width: 768px) {
+    .adaptive-glassmorphism-header {
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+  }
+
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .adaptive-glassmorphism-header {
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+    }
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    .adaptive-glassmorphism-header {
+      transition: none !important;
+      animation: none !important;
+      will-change: auto;
+    }
+    
+    .adaptive-glassmorphism-header * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
+  /* High Contrast Mode Support */
+  @media (prefers-contrast: high) {
+    .adaptive-glassmorphism-header {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 2px solid #000000 !important;
+      backdrop-filter: none !important;
+    }
+  }
+
+  /* Dark Mode Adaptations */
+  @media (prefers-color-scheme: dark) {
+    .adaptive-glassmorphism-header {
+      background: rgba(22, 21, 25, 0.12);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+  }
+
+  /* Performance Optimizations */
+  .glassmorphism-optimized {
+    contain: layout style paint;
+    content-visibility: auto;
+  }
+
+  /* Smooth Scroll Behavior */
+  @supports (scroll-behavior: smooth) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Safari-specific backdrop-filter fixes */
+  @supports (-webkit-backdrop-filter: blur(1px)) {
+    .adaptive-glassmorphism-header {
+      -webkit-backdrop-filter: var(--backdrop-filter, blur(20px) saturate(160%));
+    }
+  }
   
   .animation-delay-600 {
     animation-delay: 600ms;

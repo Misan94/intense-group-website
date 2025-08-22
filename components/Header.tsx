@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
-// Removed ProgressNavigation and MobileProgressNav imports - using hamburger menu for all screen sizes
+import { useAdaptiveColors } from '../hooks/useAdaptiveColors'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const { adaptiveColors, isTransitioning, prefersReducedMotion } = useAdaptiveColors()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,62 +33,156 @@ export default function Header() {
     { name: 'Contact Us', href: '#contact' },
   ]
 
+  // Dynamic styles for adaptive glassmorphism
+  const headerStyle = {
+    background: adaptiveColors.background,
+    backdropFilter: adaptiveColors.backdropFilter,
+    borderBottom: isScrolled ? `1px solid ${adaptiveColors.border}` : 'none',
+    boxShadow: isScrolled 
+      ? `0 8px 32px ${adaptiveColors.background.replace(/0\.\d+/, '0.1')}` 
+      : 'none',
+    transition: prefersReducedMotion 
+      ? 'none' 
+      : 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+    willChange: 'backdrop-filter, background-color, border-color'
+  }
+
+  const logoStyle = {
+    filter: adaptiveColors.logoFilter,
+    transition: prefersReducedMotion ? 'none' : 'filter 0.6s ease'
+  }
+
+  const textStyle = {
+    color: adaptiveColors.text,
+    transition: prefersReducedMotion ? 'none' : 'color 0.6s ease'
+  }
+
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-brand-black/95 backdrop-blur-md shadow-lg border-b border-white/10' 
-          : 'bg-gradient-to-b from-brand-black/80 to-transparent backdrop-blur-sm'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 adaptive-glassmorphism-header"
+      style={headerStyle}
     >
       <nav className="section-padding py-4">
         <div className="container-max flex items-center justify-between">
-          {/* Logo */}
+          {/* Adaptive Logo */}
           <Link 
             href="/" 
-            className="hover:opacity-80 transition-opacity duration-300 flex items-center z-10"
+            className="hover:opacity-80 flex items-center z-10"
+            style={{ 
+              transition: prefersReducedMotion ? 'none' : 'opacity 0.3s ease, transform 0.3s ease',
+              transform: isTransitioning ? 'scale(0.98)' : 'scale(1)'
+            }}
           >
             <Image
               src="/logo.png"
               alt="Intense Group"
               width={120}
               height={40}
-              className="h-10 w-auto object-contain brightness-0 invert"
+              className="h-10 w-auto object-contain"
+              style={logoStyle}
               priority
             />
           </Link>
 
-          {/* Hamburger Menu Button (All Screen Sizes) */}
+          {/* Adaptive Hamburger Menu Button */}
           <button
             onClick={toggleMenu}
-            className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+            className="p-2 rounded-lg"
+            style={{
+              ...textStyle,
+              backgroundColor: 'transparent',
+              transition: prefersReducedMotion 
+                ? 'none' 
+                : 'all 0.3s ease, background-color 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              if (!prefersReducedMotion) {
+                e.currentTarget.style.backgroundColor = adaptiveColors.hoverBackground
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!prefersReducedMotion) {
+                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.transform = 'scale(1)'
+              }
+            }}
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Hamburger Navigation (All Screen Sizes) */}
+        {/* Adaptive Hamburger Navigation */}
         <div 
-          className={`transition-all duration-300 ease-in-out ${
-            isMenuOpen 
-              ? 'max-h-96 opacity-100 mt-4' 
-              : 'max-h-0 opacity-0 overflow-hidden'
-          }`}
+          className="overflow-hidden"
+          style={{
+            maxHeight: isMenuOpen ? '400px' : '0px',
+            opacity: isMenuOpen ? 1 : 0,
+            marginTop: isMenuOpen ? '16px' : '0px',
+            transition: prefersReducedMotion 
+              ? 'none' 
+              : 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
         >
-          <div className="bg-brand-black/95 backdrop-blur-md rounded-lg border border-white/10 p-4 space-y-4">
+          <div 
+            className="rounded-xl p-4 space-y-4"
+            style={{
+              background: adaptiveColors.background,
+              backdropFilter: `blur(32px) saturate(200%)`,
+              border: `1px solid ${adaptiveColors.border}`,
+              boxShadow: `0 20px 40px ${adaptiveColors.background.replace(/0\.\d+/, '0.15')}`
+            }}
+          >
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-white/70 hover:text-white font-medium py-3 px-4 rounded-lg hover:bg-white/5 transition-all duration-200"
+                className="block font-medium py-3 px-4 rounded-lg"
+                style={{
+                  ...textStyle,
+                  opacity: 0.8,
+                  transition: prefersReducedMotion ? 'none' : 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!prefersReducedMotion) {
+                    e.currentTarget.style.opacity = '1'
+                    e.currentTarget.style.backgroundColor = adaptiveColors.hoverBackground
+                    e.currentTarget.style.transform = 'translateX(4px)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!prefersReducedMotion) {
+                    e.currentTarget.style.opacity = '0.8'
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                    e.currentTarget.style.transform = 'translateX(0px)'
+                  }
+                }}
               >
                 {item.name}
               </Link>
             ))}
             <button 
-              className="bg-brand-red text-white w-full py-3 px-4 rounded-lg font-semibold hover:bg-brand-red/90 transition-colors mt-4"
+              className="w-full py-3 px-4 rounded-lg font-semibold mt-4"
+              style={{
+                backgroundColor: '#fe3102',
+                color: '#ffffff',
+                transition: prefersReducedMotion ? 'none' : 'all 0.2s ease',
+                transform: 'scale(1)'
+              }}
+              onMouseEnter={(e) => {
+                if (!prefersReducedMotion) {
+                  e.currentTarget.style.backgroundColor = '#d42a00'
+                  e.currentTarget.style.transform = 'scale(1.02)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!prefersReducedMotion) {
+                  e.currentTarget.style.backgroundColor = '#fe3102'
+                  e.currentTarget.style.transform = 'scale(1)'
+                }
+              }}
               onClick={() => setIsMenuOpen(false)}
             >
               Book Consultation
