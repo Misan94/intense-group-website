@@ -21,8 +21,9 @@ export default function HeroSection() {
   ]
 
   // Rotating words for glitch transition
-  const rotatingWords = ["GROWTH", "CREATIVITY", "STRATEGY"]
+  const rotatingWords = ["GROWTH", "CREATIVITY", "STRATEGY", "SOLUTIONS"]
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const currentWordIndexRef = useRef(0)
 
   // Character splitting function
   const splitTextIntoChars = (text: string, lineIndex: number) => {
@@ -152,14 +153,19 @@ export default function HeroSection() {
     const rotatingWordElement = headlineRef.current.querySelector('.rotating-word')
     if (!rotatingWordElement) return
 
-    const currentWord = rotatingWords[currentWordIndex]
-    const nextWordIndex = (currentWordIndex + 1) % rotatingWords.length
+    const currentIndex = currentWordIndexRef.current
+    const currentWord = rotatingWords[currentIndex]
+    const nextWordIndex = (currentIndex + 1) % rotatingWords.length
     const nextWord = rotatingWords[nextWordIndex]
+    
+    console.log(`Starting glitch transition: ${currentWord} (${currentIndex}) → ${nextWord} (${nextWordIndex})`)
 
     const glitchTimeline = gsap.timeline({
       onComplete: () => {
         setIsGlitching(false)
         setCurrentWordIndex(nextWordIndex)
+        currentWordIndexRef.current = nextWordIndex
+        console.log(`Transitioning to word ${nextWordIndex}: ${rotatingWords[nextWordIndex]}`)
         // Start next transition after 3 seconds
         setTimeout(() => {
           startGlitchTransition()
